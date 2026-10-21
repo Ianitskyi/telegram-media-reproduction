@@ -1,0 +1,33 @@
+{
+  "project": "Article for Communications and Communicative Technologies",
+  "language": "uk",
+  "working_title": "Відтворення контенту професійних медіа в популярних українських Telegram-каналах у 2020–2026 роках",
+  "primary_concept": "відтворення контенту професійних медіа",
+  "avoid_as_primary_concept": "вплив",
+  "telegram_channels_configured": 13,
+  "substantive_channels": 11,
+  "media_owned_channels": 4,
+  "core_non_media_channels": 7,
+  "reported_total_messages": 1023835,
+  "reported_related_messages": 428640,
+  "reported_overall_share_pct": 41.87,
+  "core_non_media_messages": 502756,
+  "core_non_media_related_messages": 162864,
+  "core_non_media_share_pct": 32.39,
+  "methods": ["direct_link", "media_mention", "semantic_similarity"],
+  "semantic_model": "paraphrase-multilingual-MiniLM-L12-v2",
+  "semantic_threshold": 0.75,
+  "semantic_window_hours": 48,
+  "minimum_text_chars_for_similarity": 50,
+  "main_risks": [
+    "professional_media_list_provenance_unverified",
+    "internews_channel_selection_unverified",
+    "historical_media_article_coverage_unverified",
+    "link_only_zero_counts_need_audit",
+    "mention_false_positives",
+    "semantic_similarity_does_not_prove_direction",
+    "self_citation_handling_needs_verification",
+    "changing_channel_composition_over_time",
+    "views_snapshot_age_bias"
+  ]
+}

@@ -1,3 +1,16 @@
+# Відтворення контенту професійних медіа в українських Telegram-каналах (2020–2026)
+
+Дослідницький репозиторій статті для журналу *Communications and Communicative Technologies*. Автор: Андрій Яніцький.
+
+- **Як ми працюємо:** [`docs/WORKFLOW.md`](docs/WORKFLOW.md) · **Рішення:** [`docs/DECISIONS.md`](docs/DECISIONS.md) · **Журнал:** [`docs/WORKLOG.md`](docs/WORKLOG.md)
+- **Аудит методу:** [`docs/AUDIT_2026-10-21.md`](docs/AUDIT_2026-10-21.md) · **Дані:** [`DATA.md`](DATA.md) · **Контекст:** [`docs/handoff/`](docs/handoff/)
+
+Початковий код (збір даних і аналіз) написав Олег Семенюк ([osemeoseme/tg-influence-media](https://github.com/osemeoseme/tg-influence-media)); історію його комітів збережено. Відомі проблеми цього коду описано в аудиті й виправляються тут.
+
+---
+
+## Оригінальний README
+
 # Content Reproduction of Traditional Media in Telegram Channels
 
 Research project analyzing how traditional Ukrainian media content is reproduced in popular Telegram news channels.
