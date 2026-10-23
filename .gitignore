@@ -41,3 +41,4 @@ logs/
 models/
 results/v2/emb/
 results/v2/emb_full/
+results/v2/emb*/_partial_*/

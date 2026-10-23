@@ -70,12 +70,19 @@ def main() -> None:
         ids, dates, texts = prepare(det, msgs, ch if (ch in NON_MEDIA and not FULL) else None)
         n_all = len(msgs); del msgs
         parts = []
+        tmp = OUT / f"_partial_{ch}"  # порції зберігаються — після перезапуску робота продовжується
+        tmp.mkdir(exist_ok=True)
         for s in range(0, len(texts), 4000):
-            parts.append(model.encode(texts[s:s + 4000], batch_size=64, normalize_embeddings=True,
-                                      show_progress_bar=False).astype(np.float16))
+            pf = tmp / f"{s:07d}.npy"
+            if pf.exists():
+                parts.append(np.load(pf)); continue
+            e = model.encode(texts[s:s + 4000], batch_size=64, normalize_embeddings=True,
+                             show_progress_bar=False).astype(np.float16)
+            np.save(pf, e); parts.append(e)
             print(f"  {ch}: {s + len(texts[s:s + 4000])}/{len(texts)} {time.time()-t0:.0f}s", flush=True)
         emb = np.vstack(parts)
         np.savez_compressed(f, ids=np.array(ids), dates=np.array(dates), emb=emb)
+        import shutil; shutil.rmtree(tmp, ignore_errors=True)
         print(f"{ch}: {len(texts)} encoded of {n_all} in {time.time()-t0:.0f}s", flush=True)
     print("done")
 
