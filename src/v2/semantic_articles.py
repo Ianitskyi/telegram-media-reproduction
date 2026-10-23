@@ -1,7 +1,7 @@
 """Семантичні збіги з матеріалами САЙТІВ медіа — лише там, де корпус статей має дати.
 
 Корпус статей (media_all_articles.json) — RSS-знімок: 2 509 статей, 1 236 з датою, майже всі
-квітень 2026. Тому аналіз обмежено повідомленнями 7 немедійних каналів з 01.04 по 21.04.2026
+квітень 2026. Тому аналіз обмежено ВСІМА повідомленнями 7 немедійних каналів з 19.03 по 21.04.2026
 і лише датованими статтями. Статті без дати не використовуються (у v1 вони збігались із будь-яким роком).
 
 before  — max подібність до статті, опублікованої в [t-48 год, t)
@@ -19,17 +19,19 @@ import pandas as pd
 
 from src.v2.aggregate import NON_MEDIA
 from src.v2.detect import ROOT
-from src.v2.semantic_match import H48, best, load
+from src.v2.semantic_match import H48, best
+from src.v2.detect import Detector
+from src.v2.embed import prepare
 
 MODEL = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "models" / "minilm"
-START = np.datetime64("2026-04-01T00:00:00")
+START = np.datetime64("2026-03-19T00:00:00")  # статті з датою щільно йдуть з 17.03; +48 год
 
 
 def main() -> None:
     from sentence_transformers import SentenceTransformer
     arts = json.loads((ROOT / "data" / "raw" / "media_all_articles.json").read_text(encoding="utf-8"))
     rows = [(src, a) for src, lst in arts.items() for a in lst if a.get("publish_date")]
-    dates = pd.to_datetime(pd.Series([a["publish_date"] for _, a in rows]), utc=True, errors="coerce")
+    dates = pd.to_datetime(pd.Series([a["publish_date"] for _, a in rows]), utc=True, errors="coerce", format="ISO8601")
     keep = dates.notna().values
     rows = [r for r, k in zip(rows, keep) if k]
     a_dates = dates[keep].dt.tz_convert(None).values.astype("datetime64[s]")
@@ -45,9 +47,13 @@ def main() -> None:
           "April 2026:", int(((a_dates >= START) & (a_dates < np.datetime64("2026-05-01"))).sum()))
     frames = []
     for ch in NON_MEDIA:
-        ids, d, e = load(ch)
+        msgs = json.loads((ROOT / "data" / "raw" / f"telegram_{ch}.json").read_text(encoding="utf-8"))
+        ids, dd, tx = prepare(Detector(), msgs)  # усі пости, без вибірки
+        d = pd.to_datetime(pd.Series(dd), utc=True).dt.tz_convert(None).values.astype("datetime64[s]")
         sel = d >= START
-        ids, d, e = ids[sel], d[sel], e[sel]
+        ids, d = np.array(ids)[sel], d[sel]
+        e = model.encode([t for t, k in zip(tx, sel) if k], batch_size=64, normalize_embeddings=True,
+                         show_progress_bar=False).astype(np.float32)
         b_s, b_i = best(e, d, a_emb, a_dates, -H48, np.timedelta64(0, "s"))
         f_s, _ = best(e, d, a_emb, a_dates, np.timedelta64(1, "s"), H48 + np.timedelta64(1, "s"))
         frames.append(pd.DataFrame({
