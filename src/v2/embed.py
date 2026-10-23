@@ -13,6 +13,7 @@ eaa086f0ffee582aeb45b36e34cdd1fe2d6de2bef61f8a559a1bbc9bd955917b, як на Hugg
 Вихід: results/v2/emb/<channel>.npz (ids, dates, emb float16)
 """
 import json
+import os
 import sys
 import time
 from pathlib import Path
@@ -56,7 +57,10 @@ def main() -> None:
     det = Detector()
     order = ["suspilnenews", "ukrpravda_news", "truexanewsua", "kievinfo_kyiv", "UaOnlii", "vanek_nikolaev", "lachentyt",
              "times_ukraina", "batalionmonako", "TCH_channel", "uniannet"]
+    only = os.environ.get("ONLY")
     for ch in order:
+        if only and ch != only:
+            continue
         f = OUT / f"{ch}.npz"
         if f.exists():
             continue
