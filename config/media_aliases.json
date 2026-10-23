@@ -241,7 +241,7 @@
    },
    {
     "mode": "safe",
-    "pattern": "Ukrinform"
+    "pattern": "Ukr\\s?inform"
    }
   ]
  },
@@ -2098,7 +2098,11 @@
   "aliases": [
    {
     "mode": "safe",
-    "pattern": "\\bKordon\\.Media\\b"
+    "pattern": "\\bKordon\\.?\\s?Media\\b"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Кордон\\.\\s?Меді[ая]"
    }
   ]
  },

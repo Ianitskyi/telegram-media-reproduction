@@ -19,7 +19,8 @@ OUT = ROOT / "results" / "v2"
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     det = Detector()
-    data = json.loads(RAW.read_text(encoding="utf-8"))
+    channels = ["TCH_channel", "UaOnlii", "batalionmonako", "insider_zsy", "kievinfo_kyiv", "lachentyt", "suspilnenews",
+                "times_ukraina", "truexanewsua", "ukraina_novosti", "ukrpravda_news", "uniannet", "vanek_nikolaev"]
     boiler_report = {}
     alias_hits = Counter()
     t0 = time.time()
@@ -27,7 +28,8 @@ def main() -> None:
         w = csv.writer(fh)
         w.writerow(["channel", "msg_id", "date", "clean_len", "link_ids", "mention_ids",
                     "self_link", "self_mention", "mention_hits"])
-        for ch, msgs in data.items():
+        for ch in channels:
+            msgs = json.loads((ROOT / "data" / "raw" / f"telegram_{ch}.json").read_text(encoding="utf-8"))
             boiler = det.boilerplate_lines(msgs)
             boiler_report[ch] = sorted(boiler)
             for m in msgs:
