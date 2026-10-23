@@ -9,6 +9,7 @@ eaa086f0ffee582aeb45b36e34cdd1fe2d6de2bef61f8a559a1bbc9bd955917b, як на Hugg
 не кодуються (як у v1), але лишаються в знаменнику.
 
 Запуск: python -m src.v2.embed [MODEL_DIR]
+Немедійні канали — стабільна вибірка 30% (in_sample), канали медіа — повністю.
 Вихід: results/v2/emb/<channel>.npz (ids, dates, emb float16)
 """
 import json
@@ -23,12 +24,21 @@ from src.v2.detect import Detector, ROOT
 MODEL = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "models" / "minilm"
 OUT = ROOT / "results" / "v2" / "emb"
 MIN_LEN, MAX_CHARS = 50, 400
+SAMPLE_PCT = 30  # немедійні канали: стабільна вибірка 30% повідомлень (за md5 від channel:id)
+NON_MEDIA = {"truexanewsua", "kievinfo_kyiv", "UaOnlii", "vanek_nikolaev", "lachentyt", "times_ukraina", "batalionmonako"}
 
 
-def prepare(det, msgs):
+def in_sample(ch, msg_id) -> bool:
+    import hashlib
+    return int(hashlib.md5(f"{ch}:{msg_id}".encode()).hexdigest(), 16) % 100 < SAMPLE_PCT
+
+
+def prepare(det, msgs, sample_channel=None):
     boiler = det.boilerplate_lines(msgs)
     ids, dates, texts = [], [], []
     for m in msgs:
+        if sample_channel and not in_sample(sample_channel, m["id"]):
+            continue
         t = det.clean(m.get("text") or "")
         t = "\n".join(ln for ln in t.splitlines() if ln.strip() not in boiler)
         t = " ".join(t.replace("*", " ").replace("_", " ").split())
@@ -44,15 +54,15 @@ def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     model = SentenceTransformer(str(MODEL), device="cpu")
     det = Detector()
-    order = ["truexanewsua", "kievinfo_kyiv", "UaOnlii", "vanek_nikolaev", "lachentyt", "times_ukraina",
-             "batalionmonako", "suspilnenews", "ukrpravda_news", "TCH_channel", "uniannet"]
+    order = ["suspilnenews", "ukrpravda_news", "truexanewsua", "kievinfo_kyiv", "UaOnlii", "vanek_nikolaev", "lachentyt",
+             "times_ukraina", "batalionmonako", "TCH_channel", "uniannet"]
     for ch in order:
         f = OUT / f"{ch}.npz"
         if f.exists():
             continue
         t0 = time.time()
         msgs = json.loads((ROOT / "data" / "raw" / f"telegram_{ch}.json").read_text(encoding="utf-8"))
-        ids, dates, texts = prepare(det, msgs)
+        ids, dates, texts = prepare(det, msgs, ch if ch in NON_MEDIA else None)
         n_all = len(msgs); del msgs
         parts = []
         for s in range(0, len(texts), 4000):

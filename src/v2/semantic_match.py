@@ -11,7 +11,9 @@ Telegram-канали Суспільного, УП, ТСН і УНІАН є за
 Для найкращої пари «before» — частка спільних слівних триграм (Jaccard) як міра дослівності.
 
 Запуск: python -m src.v2.semantic_match
-Вихід: results/v2/semantic_matches.csv.gz
+Запуск: python -m src.v2.semantic_match suspilnenews,ukrpravda_news whitelist2
+Вихід: results/v2/semantic_matches_<TAG>.csv.gz
+Немедійні канали — стабільна 30% вибірка (див. embed.py).
 """
 import json
 import re
@@ -25,7 +27,9 @@ from src.v2.detect import ROOT, Detector
 
 EMB = ROOT / "results" / "v2" / "emb"
 OUT = ROOT / "results" / "v2"
-MEDIA_TG = ["suspilnenews", "ukrpravda_news", "TCH_channel", "uniannet"]
+import sys as _sys
+MEDIA_TG = _sys.argv[1].split(",") if len(_sys.argv) > 1 else ["suspilnenews", "ukrpravda_news", "TCH_channel", "uniannet"]
+TAG = _sys.argv[2] if len(_sys.argv) > 2 else "all4"
 H48 = np.timedelta64(48, "h")
 SHIFT = np.timedelta64(30, "D")
 WORD = re.compile(r"\w+", re.U)
@@ -103,7 +107,7 @@ def main() -> None:
         }))
         print(ch, len(q_ids), flush=True)
     df = pd.concat(frames)
-    df.to_csv(OUT / "semantic_matches.csv.gz", index=False)
+    df.to_csv(OUT / f"semantic_matches_{TAG}.csv.gz", index=False)
     for th in (0.75, 0.80, 0.85, 0.90):
         print(th, "before", round(100 * (df.sim_before >= th).mean(), 2), "control", round(100 * (df.sim_control >= th).mean(), 2),
               "after", round(100 * (df.sim_after >= th).mean(), 2))
