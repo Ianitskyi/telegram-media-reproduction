@@ -23,7 +23,8 @@ import numpy as np
 from src.v2.detect import Detector, ROOT
 
 MODEL = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "models" / "minilm"
-OUT = ROOT / "results" / "v2" / "emb"
+FULL = os.environ.get("FULL") == "1"  # FULL=1: немедійні канали повністю, у results/v2/emb_full/
+OUT = ROOT / "results" / "v2" / ("emb_full" if FULL else "emb")
 MIN_LEN, MAX_CHARS = 50, 400
 SAMPLE_PCT = 30  # немедійні канали: стабільна вибірка 30% повідомлень (за md5 від channel:id)
 NON_MEDIA = {"truexanewsua", "kievinfo_kyiv", "UaOnlii", "vanek_nikolaev", "lachentyt", "times_ukraina", "batalionmonako"}
@@ -66,7 +67,7 @@ def main() -> None:
             continue
         t0 = time.time()
         msgs = json.loads((ROOT / "data" / "raw" / f"telegram_{ch}.json").read_text(encoding="utf-8"))
-        ids, dates, texts = prepare(det, msgs, ch if ch in NON_MEDIA else None)
+        ids, dates, texts = prepare(det, msgs, ch if (ch in NON_MEDIA and not FULL) else None)
         n_all = len(msgs); del msgs
         parts = []
         for s in range(0, len(texts), 4000):

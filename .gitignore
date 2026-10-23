@@ -40,3 +40,4 @@ logs/
 # Локальні моделі (не комітимо)
 models/
 results/v2/emb/
+results/v2/emb_full/

@@ -35,8 +35,14 @@ SHIFT = np.timedelta64(30, "D")
 WORD = re.compile(r"\w+", re.U)
 
 
+import os as _os
+EMB_FULL = ROOT / "results" / "v2" / "emb_full"
+
+
 def load(ch):
-    z = np.load(EMB / f"{ch}.npz")
+    # FULL=1 — немедійні канали з повних ембедингів (emb_full), канали медіа — завжди з emb
+    f = EMB_FULL / f"{ch}.npz" if _os.environ.get("FULL") == "1" and (EMB_FULL / f"{ch}.npz").exists() else EMB / f"{ch}.npz"
+    z = np.load(f)
     d = pd.to_datetime(pd.Series(z["dates"]), utc=True).dt.tz_convert(None).values.astype("datetime64[s]")
     return z["ids"], d, z["emb"].astype(np.float32)
 
