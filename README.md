@@ -3,7 +3,7 @@
 Дослідницький репозиторій статті для журналу *Communications and Communicative Technologies*. Автор: Андрій Яніцький.
 
 - **Як ми працюємо:** [`docs/WORKFLOW.md`](docs/WORKFLOW.md) · **Рішення:** [`docs/DECISIONS.md`](docs/DECISIONS.md) · **Журнал:** [`docs/WORKLOG.md`](docs/WORKLOG.md)
-- **Аудит методу:** [`docs/AUDIT_2026-10-21.md`](docs/AUDIT_2026-10-21.md) · **Дані:** [`DATA.md`](DATA.md) · **Контекст:** [`docs/handoff/`](docs/handoff/)
+- **Аудит методу:** [`docs/AUDIT_2026-10-21.md`](docs/AUDIT_2026-10-21.md) · **Результати v2:** [`results/v2/SUMMARY.md`](results/v2/SUMMARY.md) · **Промпти:** [ChatGPT-перевіряльник](docs/CHATGPT_PROMPT.md), [незалежний аудитор](docs/AUDITOR_PROMPT.md) · **Дані:** [`DATA.md`](DATA.md) · **Контекст:** [`docs/handoff/`](docs/handoff/)
 
 Початковий код (збір даних і аналіз) написав Олег Семенюк ([osemeoseme/tg-influence-media](https://github.com/osemeoseme/tg-influence-media)); історію його комітів збережено. Відомі проблеми цього коду описано в аудиті й виправляються тут.
 
