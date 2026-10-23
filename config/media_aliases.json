@@ -1,0 +1,2383 @@
+[
+ {
+  "id": 0,
+  "name": "Суспільне",
+  "domains": [
+   "suspilne.media"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "cs",
+    "pattern": "Суспільн(е|ого|ому|им)\\b"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Suspilne"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Суспільне\\s+(Новини|Мовлення)"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "Общественн(ое|ого|ому|ым)\\b"
+   }
+  ]
+ },
+ {
+  "id": 1,
+  "name": "Еспресо",
+  "domains": [
+   "espreso.tv"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "cs",
+    "pattern": "Еспресо\\b"
+   },
+   {
+    "mode": "cs",
+    "pattern": "Эспрессо\\b"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Espreso"
+   },
+   {
+    "mode": "cs",
+    "pattern": "Еспресо\\.?\\s?TV"
+   }
+  ]
+ },
+ {
+  "id": 2,
+  "name": "Бабель",
+  "domains": [
+   "babel.ua"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "Бабел(ь|я|ю|ем)\\b"
+   },
+   {
+    "mode": "safe",
+    "pattern": "\\bBabel\\.ua"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "Babel\\b"
+   }
+  ]
+ },
+ {
+  "id": 3,
+  "name": "Українська правда",
+  "domains": [
+   "pravda.com.ua",
+   "ukrayinska-pravda.com"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Українськ\\w*\\s+правд\\w*"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Украинск\\w*\\s+правд\\w*"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Ukrainska\\s+Pravda"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "\\bУП\\b"
+   }
+  ]
+ },
+ {
+  "id": 4,
+  "name": "Радіо Свобода",
+  "domains": [
+   "radiosvoboda.org"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Раді[оo]\\s+Свобод\\w*"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Радио\\s+Свобод\\w*"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Radio\\s+Svoboda"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Радіо\\s+Свобод\\w*"
+   }
+  ]
+ },
+ {
+  "id": 5,
+  "name": "hromadske",
+  "domains": [
+   "hromadske.ua"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "\\bhromadske\\b(?!\\.radio)"
+   },
+   {
+    "mode": "safe",
+    "pattern": "\\bХромадске\\b"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "Громадськ(е|ого|ому)\\b(?!\\s+радіо)"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "Громадское\\b(?!\\s+радио)"
+   }
+  ]
+ },
+ {
+  "id": 6,
+  "name": "ZN.UA",
+  "domains": [
+   "zn.ua"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "\\bZN\\.UA\\b"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Дзеркал\\w*\\s+тижня"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Зеркал\\w*\\s+недели"
+   }
+  ]
+ },
+ {
+  "id": 7,
+  "name": "Тексти",
+  "domains": [
+   "texty.org.ua"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Тексти\\.org\\.ua"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Texty\\.org\\.ua"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "Текст(и|ів)\\b"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "Texty\\b"
+   }
+  ]
+ },
+ {
+  "id": 8,
+  "name": "LB.ua",
+  "domains": [
+   "lb.ua"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "\\bLB\\.ua\\b"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "Лів(ий|ого|ому)\\s+берег\\w*"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "Лев(ый|ого|ому)\\s+берег\\w*"
+   }
+  ]
+ },
+ {
+  "id": 9,
+  "name": "Укрінформ",
+  "domains": [
+   "ukrinform.ua",
+   "ukrinform.net"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Укрінформ\\w*"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Укринформ\\w*"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Ukrinform"
+   }
+  ]
+ },
+ {
+  "id": 10,
+  "name": "Ґрати",
+  "domains": [
+   "graty.me"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "Ґрат(и|ам|ах)\\b"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "Грати\\b"
+   },
+   {
+    "mode": "safe",
+    "pattern": "\\bGraty\\b"
+   }
+  ]
+ },
+ {
+  "id": 11,
+  "name": "Громадське радіо",
+  "domains": [
+   "hromadske.radio"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Громадськ\\w*\\s+раді[оо]"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Громадское\\s+радио"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Hromadske\\s+Radio"
+   }
+  ]
+ },
+ {
+  "id": 12,
+  "name": "Український тиждень",
+  "domains": [
+   "tyzhden.ua"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Український\\s+тиждень"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Українського\\s+тижня"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Украинская?\\s+неделя"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "Тижн(ь|я|ю)\\b"
+   }
+  ]
+ },
+ {
+  "id": 13,
+  "name": "Рубрика",
+  "domains": [
+   "rubryka.com"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "Рубрик(а|и|у|ою)\\b"
+   },
+   {
+    "mode": "safe",
+    "pattern": "\\bRubryka\\b"
+   }
+  ]
+ },
+ {
+  "id": 14,
+  "name": "Слово і Діло",
+  "domains": [
+   "slovoidilo.ua"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "cs",
+    "pattern": "Слово\\s+і\\s+[Дд]іло"
+   },
+   {
+    "mode": "cs",
+    "pattern": "Слово\\s+и\\s+[Дд]ело"
+   }
+  ]
+ },
+ {
+  "id": 15,
+  "name": "Новинарня",
+  "domains": [
+   "novynarnia.com"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Новинарн\\w*"
+   },
+   {
+    "mode": "safe",
+    "pattern": "\\bNovynarnia\\b"
+   }
+  ]
+ },
+ {
+  "id": 16,
+  "name": "Frontliner",
+  "domains": [
+   "frontliner.ua",
+   "frontliner.com.ua"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "\\bFrontliner\\b"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Фронтлайнер\\w*"
+   }
+  ]
+ },
+ {
+  "id": 17,
+  "name": "МикВісті",
+  "domains": [
+   "nikvesti.com"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "МикВіст\\w*"
+   },
+   {
+    "mode": "safe",
+    "pattern": "НикВест\\w*"
+   },
+   {
+    "mode": "safe",
+    "pattern": "\\bNikVesti\\b"
+   }
+  ]
+ },
+ {
+  "id": 18,
+  "name": "HUBZ Inform",
+  "domains": [
+   "hubz.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "\\bHUBZ\\b"
+   }
+  ]
+ },
+ {
+  "id": 19,
+  "name": "Інтент",
+  "domains": [
+   "intent.press"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "Інтент\\w*"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "\\bIntent\\b"
+   }
+  ]
+ },
+ {
+  "id": 20,
+  "name": "Бахмут.in.ua",
+  "domains": [
+   "bahmut.in.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Бахмут\\.?\\s?IN\\.?UA"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Бахмут\\.in\\.ua"
+   }
+  ]
+ },
+ {
+  "id": 21,
+  "name": "Новини здорової людини",
+  "domains": [
+   "nzl.theukrainians.org"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Новин\\w*\\s+здорово\\w*\\s+людин\\w*"
+   },
+   {
+    "mode": "safe",
+    "pattern": "\\bНЗЛ\\b"
+   }
+  ]
+ },
+ {
+  "id": 22,
+  "name": "Відбудова",
+  "domains": [
+   "vidbudova.zp.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "Відбудов(а|и)\\b"
+   }
+  ]
+ },
+ {
+  "id": 23,
+  "name": "Східний Варіант",
+  "domains": [
+   "v-variant.com.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Східн\\w*\\s+Варіант\\w*"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Восточн\\w*\\s+Вариант\\w*"
+   }
+  ]
+ },
+ {
+  "id": 24,
+  "name": "Доступ Медіа",
+  "domains": [
+   "dostyp.com.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Доступ\\s+Меді[ая]"
+   }
+  ]
+ },
+ {
+  "id": 25,
+  "name": "ЛЮК",
+  "domains": [
+   "lyuk.media"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "\\bЛЮК\\b"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "Lyuk\\b"
+   }
+  ]
+ },
+ {
+  "id": 26,
+  "name": "МОСТ",
+  "domains": [
+   "most.ks.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "\\bМОСТ\\b"
+   }
+  ]
+ },
+ {
+  "id": 27,
+  "name": "18000",
+  "domains": [
+   "18000.com.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "18000\\.com\\.ua"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "\\b18000\\b"
+   }
+  ]
+ },
+ {
+  "id": 28,
+  "name": "Махала",
+  "domains": [
+   "mahala.com.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "Махал(а|и|у|ою)\\b"
+   }
+  ]
+ },
+ {
+  "id": 29,
+  "name": "Полтавська хвиля",
+  "domains": [
+   "poltavawave.com.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Полтавськ\\w*\\s+хвил\\w*"
+   }
+  ]
+ },
+ {
+  "id": 30,
+  "name": "Gwara Media",
+  "domains": [
+   "gwaramedia.com"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Gwara\\s+Media"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Гвар[аи]\\s+Меді[ая]"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "Гвар(а|и)\\b"
+   }
+  ]
+ },
+ {
+  "id": 31,
+  "name": "КУРС",
+  "domains": [
+   "kurs.if.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "\\bКУРС\\b"
+   },
+   {
+    "mode": "safe",
+    "pattern": "kurs\\.if\\.ua"
+   }
+  ]
+ },
+ {
+  "id": 32,
+  "name": "Медіаплатформа Вгору",
+  "domains": [
+   "vgoru.org"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Медіаплатформ\\w*\\s+[«\\\"]?Вгору"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "Вгор(у)\\b"
+   }
+  ]
+ },
+ {
+  "id": 33,
+  "name": "Є",
+  "domains": [
+   "ye.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "(?<![\\w-])Є(?![\\w-])"
+   },
+   {
+    "mode": "safe",
+    "pattern": "\\bye\\.ua\\b"
+   }
+  ]
+ },
+ {
+  "id": 34,
+  "name": "The Bucha City",
+  "domains": [
+   "thebuchacity.com"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "The\\s+Bucha\\s+City"
+   }
+  ]
+ },
+ {
+  "id": 35,
+  "name": "Гречка",
+  "domains": [
+   "gre4ka.info"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "Гречк(а|и)\\b"
+   },
+   {
+    "mode": "safe",
+    "pattern": "gre4ka"
+   }
+  ]
+ },
+ {
+  "id": 36,
+  "name": "Полтавська Думка",
+  "domains": [
+   "dumka.poltava.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Полтавськ\\w*\\s+Думк\\w*"
+   }
+  ]
+ },
+ {
+  "id": 37,
+  "name": "Городок.City",
+  "domains": [
+   "horodok.city"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Городок\\.City"
+   }
+  ]
+ },
+ {
+  "id": 38,
+  "name": "Інформер",
+  "domains": [
+   "informer.od.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "Інформер\\w*"
+   }
+  ]
+ },
+ {
+  "id": 39,
+  "name": "ІА Дивись.info",
+  "domains": [
+   "dyvys.info"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Дивись\\.info"
+   },
+   {
+    "mode": "safe",
+    "pattern": "\\bDyvys\\.info"
+   }
+  ]
+ },
+ {
+  "id": 40,
+  "name": "Чернівці С4",
+  "domains": [
+   "c4.com.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Чернівці\\s+С4"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "\\bС4\\b"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "\\bC4\\b"
+   }
+  ]
+ },
+ {
+  "id": 41,
+  "name": "Крим Реалії",
+  "domains": [
+   "ua.krymr.com",
+   "krymr.com"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Крим[\\.\\s]*Реал\\w*"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Крым[\\.\\s]*Реал\\w*"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Krym[\\.\\s]*Realii"
+   }
+  ]
+ },
+ {
+  "id": 42,
+  "name": "Гард.City",
+  "domains": [
+   "thegard.city"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Гард\\.City"
+   },
+   {
+    "mode": "safe",
+    "pattern": "\\bThe\\s?Gard\\b"
+   }
+  ]
+ },
+ {
+  "id": 43,
+  "name": "Накіпело",
+  "domains": [
+   "nakypilo.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "Наки[пп][іе]ло\\b"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "Накіпело\\b"
+   },
+   {
+    "mode": "safe",
+    "pattern": "\\bNakypilo\\b"
+   }
+  ]
+ },
+ {
+  "id": 44,
+  "name": "Galka.if.ua",
+  "domains": [
+   "galka.if.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "\\bGalka\\.if\\.ua"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "Галк(а|и)\\b"
+   }
+  ]
+ },
+ {
+  "id": 45,
+  "name": "Трибуна Суми",
+  "domains": [
+   "trybuna.sumy.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Трибун\\w*\\s+Суми"
+   }
+  ]
+ },
+ {
+  "id": 46,
+  "name": "Район.in.ua",
+  "domains": [
+   "rayon.in.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Район\\.in\\.ua"
+   }
+  ]
+ },
+ {
+  "id": 47,
+  "name": "INFORM.ZP.UA",
+  "domains": [
+   "inform.zp.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "INFORM\\.ZP\\.UA"
+   }
+  ]
+ },
+ {
+  "id": 48,
+  "name": "Odesa Online",
+  "domains": [
+   "odessa.online"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Odesa\\s+Online"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "Одеса\\s+[Оо]нлайн"
+   }
+  ]
+ },
+ {
+  "id": 49,
+  "name": "Об'єктив-новини",
+  "domains": [
+   "objectiv.tv"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Об['’ʼ]єктив[\\s-]+новин\\w*"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "Об['’ʼ]єктив\\w*"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "Объектив\\w*"
+   }
+  ]
+ },
+ {
+  "id": 50,
+  "name": "Вільне радіо",
+  "domains": [
+   "freeradio.com.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Вільн\\w*\\s+раді[оо]"
+   }
+  ]
+ },
+ {
+  "id": 51,
+  "name": "Зміст",
+  "domains": [
+   "zmist.pl.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "Зміст\\b"
+   }
+  ]
+ },
+ {
+  "id": 52,
+  "name": "Трибун",
+  "domains": [
+   "tribun.com.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "Трибун\\b"
+   }
+  ]
+ },
+ {
+  "id": 53,
+  "name": "О6262",
+  "domains": [
+   "6262.com.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "6262\\.com\\.ua"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "\\bО?6262\\b"
+   }
+  ]
+ },
+ {
+  "id": 54,
+  "name": "Локатор-Медіа",
+  "domains": [
+   "lokatormedia.online"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Локатор[\\s-]+Меді[ая]"
+   }
+  ]
+ },
+ {
+  "id": 55,
+  "name": "CBN",
+  "domains": [
+   "cbn.com.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "\\bCBN\\b"
+   }
+  ]
+ },
+ {
+  "id": 56,
+  "name": "Харків Times",
+  "domains": [
+   "times.kharkiv.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Харків\\s+Times"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Харьков\\s+Times"
+   }
+  ]
+ },
+ {
+  "id": 57,
+  "name": "Менщина",
+  "domains": [
+   "mena.org.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "Менщин\\w*"
+   }
+  ]
+ },
+ {
+  "id": 58,
+  "name": "Біляївка.City",
+  "domains": [
+   "bilyayivka.city"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Біляївка\\.City"
+   }
+  ]
+ },
+ {
+  "id": 59,
+  "name": "Житомир інфо",
+  "domains": [
+   "zhitomir.info"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Житомир[\\.\\s]+[Іі]нфо"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Zhitomir\\.info"
+   }
+  ]
+ },
+ {
+  "id": 60,
+  "name": "Преступності.НЕТ",
+  "domains": [
+   "news.pn"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Преступност\\w*\\.?\\s?НЕТ"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Злочинност\\w*\\.?\\s?НЕТ"
+   },
+   {
+    "mode": "safe",
+    "pattern": "\\bnews\\.pn\\b"
+   }
+  ]
+ },
+ {
+  "id": 61,
+  "name": "0462.ua",
+  "domains": [
+   "0462.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "\\b0462\\.ua\\b"
+   }
+  ]
+ },
+ {
+  "id": 62,
+  "name": "Бердянськ 24",
+  "domains": [
+   "brd24.com"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Бердянськ\\s?24"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Бердянск\\s?24"
+   }
+  ]
+ },
+ {
+  "id": 63,
+  "name": "Харків 2дей",
+  "domains": [
+   "2day.kh.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Харків\\s+2дей"
+   },
+   {
+    "mode": "safe",
+    "pattern": "\\b2day\\.kh\\.ua"
+   }
+  ]
+ },
+ {
+  "id": 64,
+  "name": "СЛОБІДСЬКИЙ КРАЙ",
+  "domains": [
+   "slk.kh.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "Слобідськ\\w*\\s+[Кк]ра\\w*"
+   },
+   {
+    "mode": "safe",
+    "pattern": "СЛОБІДСЬКИЙ\\s+КРАЙ"
+   }
+  ]
+ },
+ {
+  "id": 65,
+  "name": "Молодий буковинець",
+  "domains": [
+   "molbuk.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Молод\\w*\\s+буковинц\\w*"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Молодий\\s+буковинець"
+   }
+  ]
+ },
+ {
+  "id": 66,
+  "name": "Жовті Води.City",
+  "domains": [
+   "zhovtivody.city"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Жовті\\s+Води\\.City"
+   }
+  ]
+ },
+ {
+  "id": 67,
+  "name": "Перший Криворізький",
+  "domains": [
+   "1kr.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Перш\\w*\\s+Криворізьк\\w*"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Перв\\w*\\s+Криворожск\\w*"
+   }
+  ]
+ },
+ {
+  "id": 68,
+  "name": "061.ua",
+  "domains": [
+   "061.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "\\b061\\.ua\\b"
+   }
+  ]
+ },
+ {
+  "id": 69,
+  "name": "MyNizhyn",
+  "domains": [
+   "mynizhyn.com"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "\\bMyNizhyn\\b"
+   }
+  ]
+ },
+ {
+  "id": 70,
+  "name": "Час Чернігівський",
+  "domains": [
+   "cntime.cn.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Час\\s+Чернігівськ\\w*"
+   }
+  ]
+ },
+ {
+  "id": 71,
+  "name": "Фарватер.Схід",
+  "domains": [
+   "farvatermedia.com"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Фарватер\\.?\\s?Схід"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "Фарватер\\w*"
+   }
+  ]
+ },
+ {
+  "id": 72,
+  "name": "На межі",
+  "domains": [
+   "mezha.city"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "На\\s+межі\\b"
+   }
+  ]
+ },
+ {
+  "id": 73,
+  "name": "Нова українська школа",
+  "domains": [
+   "nus.org.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "Нов\\w*\\s+українськ\\w*\\s+школ\\w*"
+   }
+  ]
+ },
+ {
+  "id": 74,
+  "name": "Реальна газета",
+  "domains": [
+   "realgazeta.com.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Реальн\\w*\\s+газет\\w*"
+   }
+  ]
+ },
+ {
+  "id": 75,
+  "name": "Твоє місто",
+  "domains": [
+   "tvoemisto.tv"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "Тво[єє]\\s+[Мм]істо\\b"
+   }
+  ]
+ },
+ {
+  "id": 76,
+  "name": "Цукр",
+  "domains": [
+   "cukr.city"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "Цукр\\b"
+   },
+   {
+    "mode": "safe",
+    "pattern": "cukr\\.city"
+   }
+  ]
+ },
+ {
+  "id": 77,
+  "name": "Куп'янськ.City",
+  "domains": [
+   "kupiansk.city"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Куп['’ʼ]янськ\\.City"
+   }
+  ]
+ },
+ {
+  "id": 78,
+  "name": "Думка",
+  "domains": [
+   "dumka.media"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "Думк(а|и)\\b"
+   },
+   {
+    "mode": "safe",
+    "pattern": "dumka\\.media"
+   }
+  ]
+ },
+ {
+  "id": 79,
+  "name": "Сєвєродонецьк онлайн",
+  "domains": [
+   "sd.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Сєвєродонецьк\\s+[Оо]нлайн"
+   }
+  ]
+ },
+ {
+  "id": 80,
+  "name": "О512",
+  "domains": [
+   "0512.com.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "0512\\.com\\.ua"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "\\bО?0512\\b"
+   }
+  ]
+ },
+ {
+  "id": 81,
+  "name": "Varosh",
+  "domains": [
+   "varosh.com.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "\\bVarosh\\b"
+   }
+  ]
+ },
+ {
+  "id": 82,
+  "name": "Глухів.City",
+  "domains": [
+   "hlukhiv.city"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Глухів\\.City"
+   }
+  ]
+ },
+ {
+  "id": 83,
+  "name": "Finance.ua",
+  "domains": [
+   "finance.ua"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "\\bFinance\\.ua\\b"
+   }
+  ]
+ },
+ {
+  "id": 84,
+  "name": "Горинь інфо",
+  "domains": [
+   "horyn.info"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Горинь\\s+[Іі]нфо"
+   }
+  ]
+ },
+ {
+  "id": 85,
+  "name": "Новини Донбасу",
+  "domains": [
+   "novosti.dn.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "Новин\\w*\\s+Донбас\\w*"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "Новост\\w*\\s+Донбасс\\w*"
+   }
+  ]
+ },
+ {
+  "id": 86,
+  "name": "Інформ Агенція Вчасно",
+  "domains": [
+   "vchasnoua.com"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Інформ\\s+Агенці\\w*\\s+Вчасно"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "Вчасно\\b"
+   }
+  ]
+ },
+ {
+  "id": 87,
+  "name": "0629.com.ua",
+  "domains": [
+   "0629.com.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "\\b0629\\.com\\.ua"
+   }
+  ]
+ },
+ {
+  "id": 88,
+  "name": "Карачун",
+  "domains": [
+   "karachun.com.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "Карачун\\w*"
+   }
+  ]
+ },
+ {
+  "id": 89,
+  "name": "Кременчуцький Телеграф",
+  "domains": [
+   "telegraf.in.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Кременчуцьк\\w*\\s+Телеграф\\w*"
+   }
+  ]
+ },
+ {
+  "id": 90,
+  "name": "GrivnaUA",
+  "domains": [
+   "grivna.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "\\bGrivnaUA\\b"
+   }
+  ]
+ },
+ {
+  "id": 91,
+  "name": "Медіа агентство АСС",
+  "domains": [
+   "acc.cv.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Медіа\\s+агентств\\w*\\s+АСС"
+   }
+  ]
+ },
+ {
+  "id": 92,
+  "name": "Еспресо: Біла Церква",
+  "domains": [
+   "bc.espreso.tv"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Еспресо[:\\.\\s]+Біла\\s+Церква"
+   }
+  ]
+ },
+ {
+  "id": 93,
+  "name": "Mind.ua",
+  "domains": [
+   "mind.ua"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "\\bMind\\.ua\\b"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "\\bMind\\b"
+   }
+  ]
+ },
+ {
+  "id": 94,
+  "name": "20 хвилин Вінниця",
+  "domains": [
+   "vn.20minut.ua",
+   "20minut.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "20\\s?хвилин\\s+Вінниц\\w*"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "20\\s?хвилин\\b"
+   },
+   {
+    "mode": "safe",
+    "pattern": "20minut"
+   }
+  ]
+ },
+ {
+  "id": 95,
+  "name": "Слово правди",
+  "domains": [
+   "slovopravdy.com.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "Слово\\s+правди"
+   }
+  ]
+ },
+ {
+  "id": 96,
+  "name": "misto.media",
+  "domains": [
+   "misto.media"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "\\bmisto\\.media\\b"
+   }
+  ]
+ },
+ {
+  "id": 97,
+  "name": "Перший Запорізький",
+  "domains": [
+   "1news.zp.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Перш\\w*\\s+Запорізьк\\w*"
+   }
+  ]
+ },
+ {
+  "id": 98,
+  "name": "SODA",
+  "domains": [
+   "soda.zp.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "\\bSODA\\b"
+   }
+  ]
+ },
+ {
+  "id": 99,
+  "name": "Букви",
+  "domains": [
+   "bukvy.org"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "Букв(и|ам)\\b"
+   },
+   {
+    "mode": "safe",
+    "pattern": "\\bBukvy\\b"
+   }
+  ]
+ },
+ {
+  "id": 100,
+  "name": "The Page",
+  "domains": [
+   "thepage.ua"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "cs",
+    "pattern": "The\\s+Page\\b"
+   }
+  ]
+ },
+ {
+  "id": 101,
+  "name": "Speka",
+  "domains": [
+   "speka.ua"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "\\bSpeka\\b"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "Спек(а|и)\\b"
+   }
+  ]
+ },
+ {
+  "id": 102,
+  "name": "Мілітарний",
+  "domains": [
+   "militarnyi.com"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "cs",
+    "pattern": "Мілітарн(ий|ого|ому)\\b"
+   },
+   {
+    "mode": "safe",
+    "pattern": "\\bMilitarnyi\\b"
+   }
+  ]
+ },
+ {
+  "id": 103,
+  "name": "Освіторія.Медіа",
+  "domains": [
+   "osvitoria.media"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Освіторі\\w*"
+   }
+  ]
+ },
+ {
+  "id": 104,
+  "name": "ШОТАМ",
+  "domains": [
+   "shotam.info"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "cs",
+    "pattern": "\\bШОТАМ\\b"
+   },
+   {
+    "mode": "safe",
+    "pattern": "\\bShotam\\b"
+   }
+  ]
+ },
+ {
+  "id": 105,
+  "name": "Голос Криму",
+  "domains": [
+   "voicecrimea.com.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Голос\\w*\\s+Криму"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Голос\\w*\\s+Крыма"
+   }
+  ]
+ },
+ {
+  "id": 106,
+  "name": "КРВ.медіа",
+  "domains": [
+   "krv.media"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "КРВ\\.?\\s?медіа"
+   }
+  ]
+ },
+ {
+  "id": 107,
+  "name": "Вечірній Київ",
+  "domains": [
+   "vechirniy.kyiv.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "cs",
+    "pattern": "Вечірн\\w*\\s+Київ\\w*"
+   },
+   {
+    "mode": "cs",
+    "pattern": "Вечерн\\w*\\s+Киев\\w*"
+   }
+  ]
+ },
+ {
+  "id": 108,
+  "name": "Qirim media",
+  "domains": [
+   "qirim.news"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "\\bQirim\\b"
+   }
+  ]
+ },
+ {
+  "id": 109,
+  "name": "Neformat",
+  "domains": [
+   "neformat.com.ua"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "\\bNeformat\\b"
+   }
+  ]
+ },
+ {
+  "id": 110,
+  "name": "Вчися.Медіа",
+  "domains": [
+   "vchysia.media"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Вчися\\.?\\s?Меді[ая]"
+   }
+  ]
+ },
+ {
+  "id": 111,
+  "name": "Новини.LIVE",
+  "domains": [
+   "novyny.live"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Новини\\.?\\s?LIVE"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Новости\\.?\\s?LIVE"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Novyny\\.?\\s?LIVE"
+   }
+  ]
+ },
+ {
+  "id": 112,
+  "name": "Вісник Кіровоградщини",
+  "domains": [
+   "vk.kr.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Вісник\\w*\\s+Кіровоградщин\\w*"
+   }
+  ]
+ },
+ {
+  "id": 113,
+  "name": "Знам'янка.City",
+  "domains": [
+   "znamyanka.city"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Знам['’ʼ]янка\\.City"
+   }
+  ]
+ },
+ {
+  "id": 114,
+  "name": "ZAXID.NET",
+  "domains": [
+   "zaxid.net"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "\\bZAXID\\.NET\\b"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Захід\\.?\\s?нет"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Західнет\\w*"
+   }
+  ]
+ },
+ {
+  "id": 115,
+  "name": "Сихів.Медіа",
+  "domains": [
+   "sykhiv.media"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Сихів\\.?\\s?Меді[ая]"
+   }
+  ]
+ },
+ {
+  "id": 116,
+  "name": "Інтерфакс-Україна",
+  "domains": [
+   "interfax.com.ua"
+  ],
+  "type": "national",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Інтерфакс[\\s-]+Україн\\w*"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Интерфакс[\\s-]+Украин\\w*"
+   },
+   {
+    "mode": "safe",
+    "pattern": "Interfax[\\s-]+Ukraine"
+   }
+  ]
+ },
+ {
+  "id": 117,
+  "name": "Одеське життя",
+  "domains": [
+   "odessa-life.od.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Одеськ\\w*\\s+житт\\w*"
+   }
+  ]
+ },
+ {
+  "id": 118,
+  "name": "Море Людей",
+  "domains": [
+   "moreliudei.media"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "Море\\s+Людей"
+   }
+  ]
+ },
+ {
+  "id": 119,
+  "name": "Точка Сходу",
+  "domains": [
+   "cxid.media"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "Точк\\w*\\s+Сходу"
+   }
+  ]
+ },
+ {
+  "id": 120,
+  "name": "Хутір.News",
+  "domains": [
+   "hutir.news"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Хутір\\.?\\s?News"
+   }
+  ]
+ },
+ {
+  "id": 121,
+  "name": "MISTOSUMY.com",
+  "domains": [
+   "mistosumy.com"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "\\bMISTOSUMY\\b"
+   }
+  ]
+ },
+ {
+  "id": 122,
+  "name": "Kordon.Media",
+  "domains": [
+   "kordon.media"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "\\bKordon\\.Media\\b"
+   }
+  ]
+ },
+ {
+  "id": 123,
+  "name": "Свеса.Online",
+  "domains": [
+   "svesa.online"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Свеса\\.?\\s?Online"
+   }
+  ]
+ },
+ {
+  "id": 124,
+  "name": "Обрії Ізюмщини",
+  "domains": [
+   "obrii.com.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Обрі\\w*\\s+Ізюмщин\\w*"
+   }
+  ]
+ },
+ {
+  "id": 125,
+  "name": "Громада.Груп",
+  "domains": [
+   "gromada.group"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Громада\\.Груп"
+   }
+  ]
+ },
+ {
+  "id": 126,
+  "name": "МедіаПорт",
+  "domains": [
+   "mediaport.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "МедіаПорт\\w*"
+   },
+   {
+    "mode": "safe",
+    "pattern": "МедиаПорт\\w*"
+   }
+  ]
+ },
+ {
+  "id": 127,
+  "name": "Радіо Накипіло",
+  "domains": [
+   "radio.nakypilo.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Раді[оo]\\s+Наки[пп][іи]ло"
+   }
+  ]
+ },
+ {
+  "id": 128,
+  "name": "057.ua",
+  "domains": [
+   "057.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "\\b057\\.ua\\b"
+   }
+  ]
+ },
+ {
+  "id": 129,
+  "name": "Волинь Online",
+  "domains": [
+   "volynonline.com"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Волинь\\s+Online"
+   }
+  ]
+ },
+ {
+  "id": 130,
+  "name": "Вільногірськ IN UA",
+  "domains": [
+   "vilnohirsk.in.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Вільногірськ\\s+IN\\s+UA"
+   }
+  ]
+ },
+ {
+  "id": 131,
+  "name": "Dnipro.media",
+  "domains": [
+   "dnipro.media"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "\\bDnipro\\.media\\b"
+   }
+  ]
+ },
+ {
+  "id": 132,
+  "name": "Місто і річка",
+  "domains": [
+   "mistorichka.media"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Місто\\s+і\\s+річка"
+   }
+  ]
+ },
+ {
+  "id": 133,
+  "name": "Прихист",
+  "domains": [
+   "prikhist.com"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "Прихист\\w*"
+   }
+  ]
+ },
+ {
+  "id": 134,
+  "name": "Kramatorsk Post",
+  "domains": [
+   "kramatorskpost.com"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "Kramatorsk\\s+Post"
+   }
+  ]
+ },
+ {
+  "id": 135,
+  "name": "PMG.ua",
+  "domains": [
+   "pmg.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "\\bPMG\\.ua\\b"
+   }
+  ]
+ },
+ {
+  "id": 136,
+  "name": "Zaholovok.com.ua",
+  "domains": [
+   "zaholovok.com.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "\\bZaholovok\\b"
+   }
+  ]
+ },
+ {
+  "id": 137,
+  "name": "IPC-Південь",
+  "domains": [
+   "ipc.org.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "IPC[\\s-]+Південь"
+   },
+   {
+    "mode": "safe",
+    "pattern": "ІПЦ[\\s-]+Південь"
+   }
+  ]
+ },
+ {
+  "id": 138,
+  "name": "0372",
+  "domains": [
+   "0372.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "\\b0372\\.ua\\b"
+   }
+  ]
+ },
+ {
+  "id": 139,
+  "name": "Шпальта",
+  "domains": [
+   "shpalta.media"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "Шпальт(а|и)\\b"
+   }
+  ]
+ },
+ {
+  "id": 140,
+  "name": "PECHERA.info",
+  "domains": [
+   "pechera.info"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "safe",
+    "pattern": "PECHERA\\.info"
+   },
+   {
+    "mode": "ctx",
+    "pattern": "Печер(а|и)\\b"
+   }
+  ]
+ },
+ {
+  "id": 141,
+  "name": "Вість",
+  "domains": [
+   "vestgazeta.com.ua"
+  ],
+  "type": "regional",
+  "aliases": [
+   {
+    "mode": "ctx",
+    "pattern": "Віст(ь|і)\\b"
+   }
+  ]
+ }
+]

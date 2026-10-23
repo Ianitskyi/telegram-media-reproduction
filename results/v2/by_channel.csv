@@ -1,0 +1,12 @@
+group,channel,messages,with_text,any_pct,any_pct_of_text,link_pct,mention_pct,link_only,mention_only,link_and_mention,self_link_pct,self_mention_pct
+media_owned,TCH_channel,206599.0,145300.0,0.99,1.4,0.03,0.97,43.0,1986.0,12.0,0.0,0.0
+media_owned,suspilnenews,64982.0,57195.0,0.57,0.65,0.0,0.57,1.0,370.0,0.0,63.83,17.11
+media_owned,ukrpravda_news,75612.0,65308.0,0.9,1.04,0.02,0.89,8.0,665.0,6.0,44.89,3.47
+media_owned,uniannet,173882.0,134219.0,0.56,0.72,0.0,0.55,5.0,963.0,1.0,0.0,0.0
+non_media,UaOnlii,113094.0,85282.0,1.07,1.42,0.63,0.56,580.0,495.0,136.0,0.0,0.0
+non_media,batalionmonako,56976.0,47488.0,2.04,2.44,1.72,0.52,867.0,183.0,111.0,0.0,0.0
+non_media,kievinfo_kyiv,59702.0,48909.0,0.34,0.41,0.24,0.11,135.0,57.0,10.0,0.0,0.0
+non_media,lachentyt,56159.0,49125.0,2.0,2.29,1.27,0.88,628.0,412.0,83.0,0.0,0.0
+non_media,times_ukraina,54091.0,45495.0,1.78,2.12,0.18,1.65,72.0,868.0,25.0,0.0,0.0
+non_media,truexanewsua,123190.0,97406.0,2.45,3.1,2.19,0.51,2387.0,320.0,308.0,0.0,0.0
+non_media,vanek_nikolaev,39544.0,36926.0,0.12,0.13,0.06,0.08,16.0,23.0,8.0,0.0,0.0
