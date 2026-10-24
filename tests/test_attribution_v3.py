@@ -131,3 +131,12 @@ def test_audit_round2():
     assert not run("Российский «Альфа-Банк Украина»: в чьих интересах действует банк")["has_explicit_source"]
     r = run("Пакет допомоги, — пресреліз Пентагону. [Детальніше](https://www.defense.gov/News/1)")
     assert r["linked_destinations"][0]["platform_type"] == "foreign_official_site", r["linked_destinations"]
+
+
+def test_decision6_social_other_links_not_attribution():
+    for t in ("Дивіться відео: [YouTube](https://youtu.be/abc)", "Підпишіть петицію: [тут](https://openpetition.eu/x)"):
+        r = run(t)
+        assert not r["has_explicit_source"] and r["attribution_method"] == "none", r
+        assert r["linked_destinations"], r
+    r = run("Детальніше: [тут](https://www.pravda.com.ua/news/1/)")
+    assert r["has_explicit_source"] and r["attributed_sources"][0]["actor_inferred_from_link"]

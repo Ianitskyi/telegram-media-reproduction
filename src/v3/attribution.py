@@ -234,6 +234,7 @@ class Attribution:
         return {"domain": h, "entity": h, "platform_type": "other_site", "whitelist": False}
 
     # Тип джерела, що відповідає платформі (для «лише посилання», коли актора в тексті немає)
+    NON_SOURCE_PLATFORMS = ("social_platform", "other_site")
     PLATFORM_TO_TYPE = {"ua_media_site": "ua_media", "foreign_media_site": "foreign_media", "russian_media_site": "russian_media",
                         "official_site": "ua_official", "foreign_official_site": "foreign_official",
                         "telegram_channel": "telegram", "social_platform": "social",
@@ -335,14 +336,17 @@ class Attribution:
                 if self._same_entity(a, d):
                     a["linked_destination"] = d["domain"]
         # «лише посилання»: актора в тексті немає → актор = видавець за посиланням (позначено)
+        # Рішення ⚑6 (2026-10-24): посилання лише на соцмережу чи «інший сайт» — тільки пункт призначення, не атрибуція
+        src_dests = [d for d in dests if d["platform_type"] not in self.NON_SOURCE_PLATFORMS]
         inferred = []
-        if not actors and dests:
-            for d in dests:
+        if not actors and src_dests:
+            for d in src_dests:
                 t = self.PLATFORM_TO_TYPE[d["platform_type"]]
                 inferred.append({"name": d["entity"], "type": t, "whitelist": d["whitelist"], "pattern": "link_only",
                                  "specificity": "generic" if t in ("social", "other") else "named",
                                  "linked_destination": d["domain"], "actor_inferred_from_link": True})
-        has_text, has_link = bool(actors), bool(dests)
+        has_text = bool(actors)
+        has_link = bool(src_dests) or any(x.get("linked_destination") for x in actors)
         method = "both" if has_text and has_link else "textual" if has_text else "hyperlink" if has_link else "none"
         return {
             "message_type": mtype,
