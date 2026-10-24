@@ -201,3 +201,9 @@ def test_v32_audit_platform_and_intermediary():
     n = names("Наступ можливий восени, — український чиновник в коментарі The Economist на правах анонімності")
     assert n["український чиновник"]["type"] == "anonymous" and n["The Economist"]["source_level"] == "intermediary", n
     assert run("Пишуть у Twitter, що вибухи в Москві")["has_explicit_source"]  # лише платформа — лишається social
+
+
+def test_decision7_producer():
+    r = run("‼️БУДАНОВ ДАВ ПОЯСНЕННЯ!\nКирило Олексійович (а точніше його ШІ-версія) пояснив, що відео зробили хлопці з каналу БАЗА, це Хʼюстон.")
+    assert any(s["type"] == "telegram" and s["pattern"] == "producer" for s in r["attributed_sources"]), r["attributed_sources"]
+    assert not run("Відео зробили вночі, коли було темно")["has_explicit_source"]

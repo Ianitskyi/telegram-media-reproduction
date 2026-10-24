@@ -40,6 +40,9 @@ MEDIUM = re.compile(r"\s+(?:в|у)\s+(?:коментарі|комментари�
                     r"колонці|колонке|статті|статье)\s+(?=[A-ZА-ЯІЇЄҐ«\"])", re.I)
 ANON_MARK = re.compile(r"анонімн|анонимн|побажав\w*\s+залишитис\w*\s+неназван|пожелавш\w*\s+остаться\s+неназванн|не\s+назвавш|"
                        r"на\s+умовах\s+анонім|на\s+условиях\s+аноним", re.I)
+P_PRODUCER = re.compile(r"(?:відео|видео|фото|кадри|кадры|ролик\w*|запис\w*)\s+(?:[\w'’ʼ-]+\s+){0,3}?"
+                        r"(?:зробил\w*|зробив|зняв\w*|зняли|записал\w*|записав|змонтува\w*|сделал\w*|снял\w*|записали|смонтировал\w*)\s+"
+                        r"(?P<x>[^,.;:!?\n]{2,60})", re.I)
 NEST = re.compile(r"\s+(?:(?:із|зі|з)\s+посиланням\s+на|со\s+ссылкой\s+на|посилаючись\s+на|ссылаясь\s+на)\s+", re.I)
 REL = re.compile(r",\s*(?:який|яка|яке|які|якого|якої|яку|котр\w+|который|которая|которое|которые|которого|которой|которую)\s[^,\n]{1,70},")
 KIN = re.compile(r"^(?:зят\w*|зять|син|сын|доч\w*|дружин\w*|жена|чолов\w*|муж|брат\w*|сестр\w*|тещ\w*|теща|кум\w*|онук\w*|внук\w*|родич\w*|родственни\w*|коханк\w*|любовни\w*)\s", re.I)
@@ -452,7 +455,7 @@ class Attribution:
                 elif re.search(r"\bрад[аи]\b|служб|компані|компани|фонд|асоціац|ассоциац|організац|организац|\bцентр|інститут|"
                                r"институт|університет|университет|\bбанк|агентств|комітет|комитет|\bсоюз|\bго\b", x, re.I):
                     cat = "company_organization"
-                elif pattern in ("before", "after", "signature", "colon"):
+                elif pattern in ("before", "after", "signature", "colon", "producer"):
                     return
             if pattern == "colon" and (cat not in ("ua_official", "foreign_official", "russian_official", "ua_media", "foreign_media",
                                                    "russian_media", "politician", "expert", "telegram") or len(x.split()) > 4):
@@ -492,6 +495,8 @@ class Attribution:
                     if len(found) > n0:
                         level = "embedded"
             add(m.group("x"), "prep", level, ctx_of(m.start()))
+        for m in P_PRODUCER.finditer(text):  # ⚑7: виробник поширюваного контенту — джерело
+            add(m.group("x"), "producer", ctx=ctx_of(m.start()))
         for m in P_OUTLET.finditer(text):
             add(m.group("x"), "signature", ctx=ctx_of(m.start()))
         text_nr = REL.sub("", text)  # без підрядних «…, которую возглавляет Порошенко, …»
