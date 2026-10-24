@@ -6,8 +6,8 @@
    типу джерела / способу атрибуції / типу повідомлення (щоб кожна категорія була представлена).
 
 Запуск: python -m src.v3.sample_examples
-Вихід: validation/attribution_sample_v1.csv (840, з результатами прототипу),
-       validation/attribution_examples_v2.csv (150 для перегляду), docs/ATTRIBUTION_EXAMPLES.md
+Вихід: validation/attribution_sample_v3.csv (760, з результатами прототипу),
+       validation/attribution_examples_v3.csv (150 для перегляду), docs/ATTRIBUTION_EXAMPLES.md
 """
 import json
 import random
@@ -38,12 +38,16 @@ def main() -> None:
                 r = at.analyze(m, ch, boiler)
                 rows.append({
                     "channel": ch, "period": pname, "date": m["date"][:10], "msg_id": m["id"],
-                    "message_type": r["message_type"], "in_primary_denominator": r["in_primary_denominator"],
-                    "has_explicit_source": r["has_explicit_source"],
+                    "message_type": r["message_type"], "content_type": r["content_type"], "promotional": r["promotional"],
+                    "in_primary_denominator": r["in_primary_denominator"],
+                    "has_explicit_source": r["has_explicit_source"], "has_textual_source": r["has_textual_source"],
+                    "has_embedded_source": r["has_embedded_source"],
                     "attribution_method": r["attribution_method"], "n_sources": r["n_sources"],
                     "attributed_sources": " | ".join(
                         f"{s['name']} [{s['type']}{', WL' if s['whitelist'] else ''}; {s['pattern']}; {s['specificity']}"
                         f"{'; →' + s['linked_destination'] if s.get('linked_destination') else ''}"
+                        f"{'; ВКЛАДЕНЕ' if s.get('source_level') == 'embedded' else ''}"
+                        f"{'; = ' + ' + '.join(s['merged_with']) if s.get('merged_with') else ''}"
                         f"{'; АКТОР З ПОСИЛАННЯ' if s.get('actor_inferred_from_link') else ''}]" for s in r["attributed_sources"]),
                     "linked_destinations": " | ".join(f"{d['entity']} [{d['platform_type']}{', WL' if d['whitelist'] else ''}]"
                                                       for d in r["linked_destinations"]),
@@ -52,16 +56,17 @@ def main() -> None:
                 })
     df = pd.DataFrame(rows)
     (ROOT / "validation").mkdir(exist_ok=True)
-    df.to_csv(ROOT / "validation" / "attribution_sample_v2.csv", index=False, encoding="utf-8-sig")
+    df.to_csv(ROOT / "validation" / "attribution_sample_v3.csv", index=False, encoding="utf-8-sig")
 
     # --- 150 прикладів для перегляду
     pick = set()
     for (ch, p), g in df.groupby(["channel", "period"]):
         pick |= set(g.sample(min(4, len(g)), random_state=SEED).index)
     targets = [("source_types", t) for t in TYPES] + [("attribution_method", m) for m in ("hyperlink", "textual", "both")] + \
-              [("message_type", m) for m in ("ad", "alert", "self_promo", "technical")]
+              [("message_type", m) for m in ("ad", "alert", "self_promo", "technical")] + \
+              [("promotional", "self_promo"), ("has_embedded_source", "True")]
     for col, val in targets:
-        cand = df[df[col].astype(str).str.contains(rf"(^|;){val}(;|$)", regex=True)].drop(index=list(pick), errors="ignore")
+        cand = df[df[col].astype(str).str.contains(rf"(?:^|;){val}(?:;|$)", regex=True)].drop(index=list(pick), errors="ignore")
         pick |= set(cand.sample(min(4, len(cand)), random_state=SEED).index)
     ex = df.loc[sorted(pick)].copy()
     if len(ex) > 150:
@@ -71,25 +76,30 @@ def main() -> None:
     ex.insert(0, "item", range(1, len(ex) + 1))
     for c in ("ok_has_source", "ok_actors", "ok_types", "ok_message_type", "correct_value", "comment"):
         ex[c] = ""
-    ex.to_csv(ROOT / "validation" / "attribution_examples_v2.csv", index=False, encoding="utf-8-sig")
+    ex.to_csv(ROOT / "validation" / "attribution_examples_v3.csv", index=False, encoding="utf-8-sig")
 
     # --- статистика по вибірці 840
     news = df[df.in_primary_denominator]
     tc = Counter(t for s in df.source_types for t in s.split(";") if t)
-    md = ["# Приклади атрибуції — прототип v3.1 (після аудиту ChatGPT, 2026-10-24)", "",
-          "Схема v3.1: **джерело-актор** (хто є джерелом) окремо від **пункту призначення посилання** (куди веде лінк). "
-          "«АКТОР З ПОСИЛАННЯ» — у тексті актора немає, тому джерелом вважається видавець за посиланням.", "",
+    md = ["# Приклади атрибуції — прототип v3.2 (після другого аудиту ChatGPT, 2026-10-24)", "",
+          "Схема: **джерело-актор** (хто є джерелом) окремо від **пункту призначення посилання** (куди веде лінк). "
+          "«АКТОР З ПОСИЛАННЯ» — у тексті актора немає, тому джерелом вважається видавець за посиланням (лише медіа, офіційні сайти, Telegram-канали; ⚑6). "
+          "«ВКЛАДЕНЕ» — джерело джерела («CBS із посиланням на чиновників»: CBS — пряме, чиновники — вкладене). "
+          "«= …» — злито з тією самою особою, названою роллю («Спикер» = Андрющенко). "
+          "Тип повідомлення: зміст (`content_type`) і промо (`promotional`) — окремо; самопромо виключає повідомлення зі знаменника, лише якщо іншого змісту немає.", "",
           "Це **не результати**, а перевірка правил на стратифікованій вибірці (до запуску на повному корпусі).", "",
           f"Вибірка: {len(df)} повідомлень (7 каналів × 3 періоди × до 40).", "",
           "## Що показує прототип на вибірці", "",
-          f"- тип повідомлення: {df.message_type.value_counts().to_dict()}",
+          f"- тип повідомлення (зведений): {df.message_type.value_counts().to_dict()}",
+          f"- зміст: {df.content_type.value_counts().to_dict()}; промо: {df.promotional.value_counts().to_dict()}",
+          f"- з текстовою атрибуцією (основний знаменник): {100*news.has_textual_source.mean():.1f}%; з вкладеним джерелом: {int(df.has_embedded_source.sum())}",
           f"- з явним джерелом — усі: {100*df.has_explicit_source.mean():.1f}%; основний знаменник (без реклами/самопромо/технічних): {100*news.has_explicit_source.mean():.1f}% (n={len(news)})",
           f"- спосіб атрибуції: {df.attribution_method.value_counts().to_dict()}",
           f"- типи джерел (кількість повідомлень): {dict(tc.most_common())}", "",
           "## Приклади для перегляду", "",
           "Повна таблиця з колонками для ваших позначок — `validation/attribution_examples_v2.csv`.", ""]
     for _, r in ex.iterrows():
-        md += [f"**#{r['item']}** · {r['channel']} · {r['date']} · тип повідомлення: `{r['message_type']}` · "
+        md += [f"**#{r['item']}** · {r['channel']} · {r['date']} · тип: `{r['content_type']}`{' + ' + r['promotional'] if r['promotional'] != 'no' else ''} → `{r['message_type']}` · "
                f"джерело: **{'так' if r['has_explicit_source'] else 'ні'}** · спосіб: `{r['attribution_method']}`",
                f"> {r['text'][:400].replace(chr(10), ' ')}", "",
                f"Джерела-актори: {r['attributed_sources'] or '—'}",

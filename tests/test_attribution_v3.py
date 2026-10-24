@@ -140,3 +140,53 @@ def test_decision6_social_other_links_not_attribution():
         assert r["linked_destinations"], r
     r = run("Детальніше: [тут](https://www.pravda.com.ua/news/1/)")
     assert r["has_explicit_source"] and r["attributed_sources"][0]["actor_inferred_from_link"]
+
+
+def test_audit_v31_round():
+    """Другий аудит ChatGPT (v3.1 → v3.2)."""
+    names = lambda t: {s["name"]: s for s in run(t)["attributed_sources"]}
+    n = names("Українці за 2 дні спустошили всі автосалони, — Аutoconsulting")   # кирилична «А»
+    assert "Autoconsulting" in n, n
+    assert "Новини.LIVE" in names("⚡ До 6 тис грн коштують квіти зараз у Києві, — «Новини.LIVЕ».")
+    assert names("Видання Yle показали кадри 30-річної давнини")["Yle"]["type"] == "foreign_media"
+    n = names("Прильоти в Павлограді, — місцеві ЗМІ і монітори.")
+    assert set(n) == {"місцеві ЗМІ", "монітори"}, n
+    assert "Мариупольский горсовет" in names("Мариупольский горсовет: «За 24 часа город бомбардировали 22 раза»")
+    assert set(names("Повістки публікуватимуть онлайн, — ЗМІ з посиланням на законопроєкт")) >= {"ЗМІ"}
+    n = names("Премьер-министр Великобритании заявил, что опасается атаки. «Это их сценарий», - сказал Джонсон в интервью")
+    assert list(n) == ["Джонсон"] and n["Джонсон"]["type"] == "foreign_official", n
+    n = names("Про це сам експрезидент США розповів в інтерв'ю. «Я вдарю», — заявив Трамп.")
+    assert list(n) == ["Трамп"], n
+    assert names("Зять Шойгу вважає війну безглуздою")["Зять Шойгу"]["type"] == "person_other"
+    n = names("Великобритания не планирует отправлять корабли в Черное море, по словам представителя правительства.")
+    assert n["представителя правительства"]["type"] == "foreign_official", n
+    r = run("⚡️CBS News со ссылкой на американских чиновников сообщает, что подразделения выдвинулись")
+    lv = {s["name"]: s["source_level"] for s in r["attributed_sources"]}
+    assert lv.get("CBS News") == "direct" and lv.get("американских чиновников") == "embedded", lv
+    r = run("Панцир не зміг збити дрон, — «Радіо Свобода» із посиланням на супутникові знімки та публікації в соцмережах.")
+    lv = {s["name"]: s["source_level"] for s in r["attributed_sources"]}
+    assert lv.get("Радіо Свобода") == "direct" and r["has_embedded_source"], lv
+    n = names("Как сообщил советник мэра Мариуполя Петр Андрющенко, взрыв случился в отеле. Спикер опубликовал фото.")
+    assert len(n) == 1 and n["советник мэра Мариуполя Петр Андрющенко"]["type"] == "ua_official", n
+
+
+def test_content_vs_promo():
+    r = run("Усик переміг")
+    assert r["content_type"] == "informational" and r["in_primary_denominator"], r
+    r = run("‼️ ВНИМАНИЕ БЕЛГОРОД ‼️\n❗️ВОЗДУШНАЯ ТРЕВОГА ❗️\n⚠️ВСЕМ НЕМЕДЛЕННО ПОКИНУТЬ ПОМЕЩЕНИЯ")
+    assert r["content_type"] == "alert", r
+    r = run("🔴Можливо буде пуск кінджала! Набрав швидкість та висоту\n➡️ ПІДПИСАТИСЬ ⤵️")
+    assert r["promotional"] == "self_promo" and r["in_primary_denominator"], r
+    r = run("‼️БУДАНОВ ДАВ ПОЯСНЕННЯ!\nКирило Олексійович пояснив, що відео зробили хлопці з каналу БАЗА.\nПідписуйтесь на авторів.")
+    assert r["in_primary_denominator"], r
+    r = run("Підписуйтесь на наш канал 👉 https://t.me/x")
+    assert not r["in_primary_denominator"], r
+
+
+def test_v32_review():
+    names = lambda t: {s["name"]: s for s in run(t)["attributed_sources"]}
+    assert set(names("Макрон відклав візит, — Challenges\nВидання зазначає, що дипломати «упали зі стільців».")) == {"Challenges"}
+    assert set(names("Танки будуть восени, — глава Пентагона Ллойд Остин\nОстин объяснил, что ускорить сроки сложно")) == {"глава Пентагона Ллойд Остин"}
+    n = names("Владимир Зеленский и Белый дом заявили о новых гарантиях")
+    assert {"Владимир Зеленский", "Белый дом"} <= set(n), n
+    assert names("Мобілізація неминуча, — Рада безпеки рФ")["Рада безпеки рФ"]["type"] == "russian_official"
