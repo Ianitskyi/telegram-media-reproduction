@@ -61,19 +61,31 @@ def algorithm() -> None:
 
 
 # ---------- канонічна форма відповіді ----------
-def stems(name: str) -> list:
-    n = re.sub(r"[«»\"“”'’ʼ().,:;!?\-—–@]", " ", name.lower().replace("ё", "е"))
+TR = str.maketrans({"а": "a", "б": "b", "в": "v", "г": "h", "ґ": "g", "д": "d", "е": "e", "є": "ye", "ж": "zh", "з": "z", "и": "y",
+                    "і": "i", "ї": "yi", "й": "y", "к": "k", "л": "l", "м": "m", "н": "n", "о": "o", "п": "p", "р": "r", "с": "s",
+                    "т": "t", "у": "u", "ф": "f", "х": "kh", "ц": "ts", "ч": "ch", "ш": "sh", "щ": "shch", "ь": "", "ю": "yu",
+                    "я": "ya", "ы": "y", "э": "e", "ъ": "", "ё": "e"})
+
+
+def stems(name: str, translit: bool = False) -> list:
+    n = name.lower().replace("ё", "е")
+    n = re.sub(r"https?://|t\.me/|\.(?:com|ua|net|org|info|ru|eu|gov)\b", " ", n)
+    n = re.sub(r"[«»\"“”'’ʼ().,:;!?\-—–@_/]", " ", n)
+    if translit:
+        n = n.translate(TR).replace("ph", "f").replace("g", "h")
     toks = [t for t in n.split() if t not in STOP]
     core = [t for t in toks if not ROLE.match(t)] or toks
     return [t[:5] for t in core]
 
 
 def same_name(a: str, b: str) -> bool:
-    sa, sb = stems(a), stems(b)
-    if not sa or not sb:
-        return False
-    short, long_ = (sa, sb) if len(sa) <= len(sb) else (sb, sa)
-    return set(short) <= set(long_)
+    for tr in (False, True):  # також через транслітерацію: «apostrophe.ua» = «Апостроф», «@arma_gov» = «АРМА»
+        sa, sb = stems(a, tr), stems(b, tr)
+        if sa and sb:
+            short, long_ = (sa, sb) if len(sa) <= len(sb) else (sb, sa)
+            if set(short) <= set(long_):
+                return True
+    return False
 
 
 def in_denominator(o: dict) -> bool:
@@ -104,7 +116,9 @@ def same_sources(a: list, b: list, with_type=True) -> bool:
         return False
     used = set()
     for s in a:
-        j = next((j for j, t in enumerate(b) if j not in used and same_name(s["name"], t["name"])
+        j = next((j for j, t in enumerate(b) if j not in used
+                  and (same_name(s["name"], t["name"]) or (s["type"] == t["type"] and s.get("specificity") in ("generic", "anonymous")
+                                                           and t.get("specificity") in ("generic", "anonymous")))
                   and (not with_type or s["type"] == t["type"])), None)
         if j is None:
             return False

@@ -12,18 +12,22 @@ from src.v3 import gazetteer as G
 
 A = "['’ʼ]"
 MD_LINK = re.compile(r"\[([^\]]*)\]\(((?:https?://|tg://)[^)\s]*)\)")
-BARE_URL = re.compile(r"(?<!\()\bhttps?://[^\s)\]]+", re.I)
+BARE_URL = re.compile(r"(?<![(\w/])(?:(?<=_)|(?<!\w))https?://[^\s)\]_]+(?:_[^\s)\]_]+)*", re.I)
 FMT = re.compile(r"\*\*|__|~~|`")
 
 SPEECH_UA = (r"заяви\w*|повідоми\w*|повідомля\w*|сказа\w*|пише|пишуть|написа\w*|зазнач\w*|наголоси\w*|розпові\w*|"
              r"підтверди\w*|інформу\w*|передає|передають|додав|додала|додали|уточни\w*|попереди\w*|звітує|звітують|"
              r"анонсува\w*|оголоси\w*|прокоментува\w*|відповів|відповіла|вважає|переконаний|переконана|стверджу\w*|"
-             r"пояснив|пояснила|пояснили|каже|кажуть|говорять|відреагува\w*|опублікува\w*|поскаржи\w*|попереджа\w*")
+             r"пояснив|пояснила|пояснили|каже|кажуть|говорять|обіця\w*|пообіця\w*|закликав|закликала|закликали|припуска\w*|погрож\w*|назвав|назвала|назвали|"
+             r"запевни\w*|визнав|визнала|визнали|спростува\w*|прогнозу\w*|звинуват\w*|відредагува\w*|розкритикува\w*|висловив\w*|"
+             r"показав|показала|показали|наполяга\w*|вимага\w*|відреагува\w*|опублікува\w*|поскаржи\w*|попереджа\w*")
 SPEECH_RU = (r"заявил\w*|сообщ\w*|сказал\w*|пишет|пишут|написал\w*|отметил\w*|подчеркнул\w*|рассказал\w*|подтвердил\w*|"
              r"передает|передают|добавил\w*|уточнил\w*|предупредил\w*|объявил\w*|прокомментировал\w*|ответил\w*|считает|утвержда\w*|"
-             r"объяснил\w*|говорит|говорят|отреагировал\w*|опубликовал\w*|пожаловал\w*|предупрежда\w*")
+             r"объяснил\w*|говорит|говорят|обеща\w*|пообеща\w*|призвал\w*|призыва\w*|предполож\w*|предполага\w*|угрожа\w*|назвал\w*|заверил\w*|"
+             r"признал\w*|опроверг\w*|требу\w*|прогнозир\w*|обвинил\w*|обвиня\w*|раскритиковал\w*|высказал\w*|показал\w*|настаива\w*|отреагировал\w*|опубликовал\w*|пожаловал\w*|предупрежда\w*")
 SPEECH = f"(?:{SPEECH_UA}|{SPEECH_RU})"
-ROLE_START = (r"голова|глава|очільник\w*|керівник\w*|мер|мэр|міністр\w*|министр\w*|речни\w*|спікер\w*|прес\w*|пресс\w*|"
+ROLE_START = (r"спикер\w*|руководител\w*|член\w*|генеральн\w*|госсекретар\w*|державн\w*\s+секретар\w*|государственн\w*\s+секретар\w*|секретар\w*|генерал\w*|"
+              r"блогер\w*|волонтер\w*|боєць|боец|офіцер\w*|офицер\w*|в\.о|т\.в\.о|первый|перший|голова|глава|очільник\w*|керівник\w*|мер|мэр|міністр\w*|министр\w*|речни\w*|спікер\w*|прес\w*|пресс\w*|"
               r"заступни\w*|командир\w*|командувач\w*|представни\w*|радни\w*|советни\w*|посол\w*|депутат\w*|нардеп\w*|"
               r"експерт\w*|эксперт\w*|аналіти\w*|аналити\w*|прем.?єр\w*|премьер\w*|президент\w*|начальни\w*|директор\w*|"
               r"генпрокурор\w*|прокурор\w*|військов\w*|военн\w*|монітор\w*|монитор\w*|місцев\w*|местн\w*|очевид\w*|"
@@ -41,8 +45,14 @@ MEDIUM = re.compile(r"\s+(?:в|у)\s+(?:коментарі|комментари�
 ANON_MARK = re.compile(r"анонімн|анонимн|побажав\w*\s+залишитис\w*\s+неназван|пожелавш\w*\s+остаться\s+неназванн|не\s+назвавш|"
                        r"на\s+умовах\s+анонім|на\s+условиях\s+аноним", re.I)
 P_PRODUCER = re.compile(r"(?:відео|видео|фото|кадри|кадры|ролик\w*|запис\w*)\s+(?:[\w'’ʼ-]+\s+){0,3}?"
-                        r"(?:зробил\w*|зробив|зняв\w*|зняли|записал\w*|записав|змонтува\w*|сделал\w*|снял\w*|записали|смонтировал\w*)\s+"
+                        r"(?:зробил\w*|зробив|зняв\w*|зняли|зняте|знято|знятий|знята|снято|снятое|снятые|записал\w*|записав|змонтува\w*|сделал\w*|снял\w*|записали|смонтировал\w*)\s+"
                         r"(?P<x>[^,.;:!?\n]{2,60})", re.I)
+P_CREDIT = re.compile(r"(?:^|\n)[^\w\n]{0,4}(?:Відео|Видео|Фото|Автор\s+відео|Автор\s+видео|Автор\s+фото|Джерело\s+відео|Источник\s+видео)\s*:\s*(?P<x>[^\n]{2,60})")
+DOC_WORD = re.compile(r"^(?:проєкт\w*|проект\w*|законопроєкт\w*|законопроект\w*|документ\w*|постанов\w*|указ\w*|звіт\w*|отчет\w*|доповід\w*|доклад\w*|"
+                      r"дослідженн\w*|исследовани\w*|опитуванн\w*|опрос\w*|рейтинг\w*|прогноз\w*|декларац\w*|статистик\w*|дані|данные)\b", re.I)
+NAME_TAIL = re.compile(r"[A-ZА-ЯІЇЄҐ][a-zа-яіїєґ'’ʼ\-]+\s+[A-ZА-ЯІЇЄҐ][a-zа-яіїєґ'’ʼ\-]+$")
+ROLE_ANY = re.compile(r"журналіст|журналист|кореспондент|корреспондент|секретар|міністр|министр|посол|президент|прем|канцлер|генерал|командувач|командующ|речни|представни|представител|"
+                      r"спікер|спикер|голов|глав|мер|мэр|директор|керівни|руководител|начальни|депутат|сенатор|конгресмен", re.I)
 NEST = re.compile(r"\s+(?:(?:із|зі|з)\s+посиланням\s+на|со\s+ссылкой\s+на|посилаючись\s+на|ссылаясь\s+на)\s+", re.I)
 REL = re.compile(r",\s*(?:який|яка|яке|які|якого|якої|яку|котр\w+|который|которая|которое|которые|которого|которой|которую)\s[^,\n]{1,70},")
 KIN = re.compile(r"^(?:зят\w*|зять|син|сын|доч\w*|дружин\w*|жена|чолов\w*|муж|брат\w*|сестр\w*|тещ\w*|теща|кум\w*|онук\w*|внук\w*|родич\w*|родственни\w*|коханк\w*|любовни\w*)\s", re.I)
@@ -59,26 +69,28 @@ ROLE_WORD = re.compile(r"^(?:сам\s+|сама\s+|бывш\w*\s+|колишн\w
                        r"представител\w*|радни\w*|советни\w*|посол\w*|депутат\w*|нардеп\w*|прем.?єр\w*|премьер\w*|президент\w*|"
                        r"експрезидент\w*|экспрезидент\w*|начальни\w*|директор\w*|гендиректор\w*|банкір\w*|банкир\w*|"
                        r"видання|издание|агентство|політсил\w*|политсил\w*|парті\w*|парти\w*|відомств\w*|ведомств\w*|канцлер\w*|губернатор\w*)\b", re.I)
-ORG_NOUN = re.compile(r"^(?:дом|дім|безпек\w*|безопасност\w*|прес\w*-?служб\w*|пресс\w*-?служб\w*|горсовет\w*|міськрад\w*|рад[аиі]|совет\w*|адміністрац\w*|администрац\w*|служб\w*|управлін\w*|управлен\w*|"
+ORG_NOUN = re.compile(r"^(?:дом\w*|дім\w*|безпек\w*|безопасност\w*|прес\w*-?служб\w*|пресс\w*-?служб\w*|горсовет\w*|міськрад\w*|рад[аиі]|совет\w*|адміністрац\w*|администрац\w*|служб\w*|управлін\w*|управлен\w*|"
                       r"міністерств\w*|министерств\w*|інститут\w*|институт\w*|університет\w*|университет\w*|центр\w*|комітет\w*|"
                       r"комитет\w*|прокуратур\w*|поліці\w*|полици\w*|уряд\w*|правительств\w*|парті\w*|парти\w*|банк\w*|компані\w*|"
                       r"компани\w*|фонд\w*|військ\w*|войск\w*|командуванн\w*|штаб\w*|академі\w*|академи\w*|агентств\w*)$", re.I)
-ADJ_END = re.compile(r"(ський|ский|цький|цкий|ська|ская|цька|цкая|ське|ское|ий|ый|ой|ая|ій|ня|ое|е|а)$")
+ADJ_END = re.compile(r"(ський|ский|цький|цкий|ська|ская|цька|цкая|ське|ское|ий|ый|ой|ая|ій|ня|ое|е|а|ого|ої|ою)$")
 P_OUTLET = re.compile(rf"(?:^|[\s,(])(?i:видання|издание|агентство|агентства|телеканал|газета|журнал|медіа|медиа)\s+(?P<x>{CAP}[^\s,.;:!?]{{1,30}}(?:\s+{CAP}[^\s,.;:!?]{{1,20}}){{0,2}})\s+"
                       rf"(?i:{SPEECH}|показал\w*|показав\w*|оприлюдни\w*|з.ясува\w*|выяснил\w*|дізнал\w*|узнал\w*|публікує|публикует)")
 
-P_SIGN = re.compile(r"(?:[,\.!?»\"”…\)]\s*|\s)[—–]{1,2}\s*(?P<x>[^\n—–]{2,90}?)\s*[\.!]?\s*$")
+P_SIGN = re.compile(r"(?:[,\.!?»\"”…\)]\s*|\s|(?<=\w))[—–]{1,2}\s*(?P<x>[^\n—–]{2,90}?)\s*[\.!]?\s*$")
 P_SIGN_MID = re.compile(r"[,!?»\"”…]\s*[—–]{1,2}\s*(?P<x>[^\n—–.]{2,60}?)\.(?=\s+[A-ZА-ЯІЇЄҐ«\"])")
-P_ROLE_BEFORE = re.compile(rf"(?:^|[\.!?…—–]\s*|\n)(?P<x>(?i:{ROLE_START})[\w\-]*(?:[ \t\u00a0]+[\w'’ʼ\-«»\"“”]+){{0,4}}?)[ \t\u00a0]+(?i:{SPEECH})\b")
-P_IMPERSONAL = re.compile(r"(?:^|[\.!?…]\s+|\n)(?:повідомляють|кажуть|пишуть|говорять|сообщают|говорят|пишут|передают)\s*,?\s+(?:що|что)\b", re.I)
+P_ROLE_BEFORE = re.compile(rf"(?:^|[\.!?…—–]\s*|\n|(?<=\s))[^\w\n«\"“]{{0,6}}(?P<x>(?i:{ROLE_START})[\w\-\.]*(?:[ \t\u00a0]+[\w'’ʼ\-«»\"“”№]+){{0,7}}?)(?:[ \t ]+(?:сьогодні|сегодня|вчора|вчера|також|также|уже|вже|раніше|ранее|теж|тоже|ще|еще|в\s+свою\s+очередь|своєю\s+чергою|у\s+свою\s+чергу))?[ \t\u00a0]+(?i:{SPEECH})\b")
+P_IMPERSONAL = re.compile(r"(?:^|[\.!?…]\s+|\n)[^\w\n]{0,6}(?:(?:повідомляють|кажуть|пишуть|говорять|сообщают|говорят|пишут|передают)\s*,?\s+(?:що|что)\b|"
+                          r"(?:повідомляють|сообщают)\s+(?:про|о|об)\b)", re.I)
+P_SIGN_HY2 = re.compile(r"\s-\s(?P<x>[A-ZА-ЯІЇЄҐ«\"][^\n\-]{1,45}?)\s*[\.!]?\s*$")
 P_SIGN_HY = re.compile(r"[,»\"”]\s*-\s*(?P<x>[^\n—–\-]{2,90}?)\s*[\.!]?\s*$")
-P_AFTER = re.compile(rf"(?<!\w)(?i:{SPEECH})\s+(?:(?:у|в|во)\s+)?(?P<x>(?:{CAP}|(?i:{ROLE_START})\b)[^,.;:!?\n«»\"“”]{{1,80}})")
-P_BEFORE = re.compile(rf"(?:^|[\.!?…]\s+|[—–]\s*|\n)(?P<x>[A-ZА-ЯІЇЄҐ@][\w'’ʼ\-]*(?:[ \t\u00a0]+[\w'’ʼ\-]+){{0,5}}?)[ \t\u00a0]+{SPEECH}\b")
+P_AFTER = re.compile(rf"(?<!\w)(?i:{SPEECH})\s+(?i:(?:на\s+брифінгу|на\s+брифинге|в\s+ефірі|у\s+ефірі|в\s+эфире|в\s+коментарі|у\s+коментарі|в\s+комментарии)\s+)?(?:(?:у|в|во)\s+)?(?P<x>(?:{CAP}|(?i:{ROLE_START})\b)[^,.;:!?\n«»\"“”]{{1,80}})")
+P_BEFORE = re.compile(rf"(?:^|[\.!?…]\s+|[—–]\s*|\n|(?<![\w,])(?i:так|вот\s+так|ось\s+так)\s+)[^\w\n«\"“]{{0,6}}(?P<x>[A-ZА-ЯІЇЄҐ@][\w'’ʼ\-]*(?:[ \t\u00a0]+[\w'’ʼ\-№]+){{0,5}}?)(?:[ \t ]+(?:сьогодні|сегодня|вчора|вчера|також|также|уже|вже|раніше|ранее|теж|тоже|ще|еще|в\s+свою\s+очередь|своєю\s+чергою|у\s+свою\s+чергу))?[ \t\u00a0]+{SPEECH}\b")
 P_COLON = re.compile(r"(?:^|\n)\W{0,4}(?P<x>[A-ZА-ЯІЇЄҐ«\"][^\n:]{1,45}?):\s+\S")
 P_IN = re.compile(rf"(?:^|[\s,])[УВуВ]\s+(?P<x>{CAP}[^,.;:!?\n]{{1,60}}?)\s+"
                   rf"(?:повідомили|заявили|кажуть|розповіли|підтвердили|зазначили|наголосили|уточнили|відповіли|"
-                  rf"сообщили|заявили|рассказали|подтвердили|отметили|уточнили|ответили)\b")
-P_PREP = re.compile(r"(?P<t>за\s+даними|за\s+інформацією|за\s+словами|(?<!\w)(?:із|зі|з)\s+посиланням\s+на|посилаючись\s+на|як\s+повідомля\w*|"
+                  rf"сообщили|заявили|рассказали|назвали|подтвердили|отметили|уточнили|ответили)\b")
+P_PREP = re.compile(r"(?P<t>зі\s+слів|із\s+слів|со\s+слов|за\s+даними|за\s+інформацією|за\s+словами|(?<!\w)(?:із|зі|з)\s+посиланням\s+на|посилаючись\s+на|як\s+повідомля\w*|"
                     r"як\s+пише|як\s+пишуть|як\s+заяви\w*|як\s+розпові\w*|джерело\s*:|джерела\s*:|"
                     r"по\s+данным|по\s+информации|по\s+словам|со\s+ссылкой\s+на|ссылаясь\s+на|как\s+сообща\w*|как\s+пишет|"
                     r"как\s+пишут|как\s+заявил\w*|источник\s*:|"
@@ -86,9 +98,10 @@ P_PREP = re.compile(r"(?P<t>за\s+даними|за\s+інформацією|з
 P_EYE = re.compile(r"#\s?нам\s?пишуть|#\s?нам\s?пишут|нам\s+пишуть|нам\s+пишут|пишуть\s+підписники|пишут\s+подписчики|"
                    r"підписники\s+(?:повідомляють|надіслали|пишуть)|подписчики\s+(?:сообщают|прислали|пишут)|"
                    r"очевидці\s+(?:повідомляють|розповідають|кажуть)|очевидцы\s+(?:сообщают|рассказывают)", re.I)
-P_SOCIAL = re.compile(r"(?:у|в)\s+(?:мережі|сети)\s+(?:з.явил\w*|поширю\w*|поширил\w*|появил\w*|распространя\w*|опублікува\w*|публику\w*)|користувачі\s+соцмереж|пользователи\s+соцсетей|відео\s+(?:з\s+)?соцмереж",
+P_SOCIAL = re.compile(r"(?:з.яви\w*|опубліков\w*|появил\w*|попал\w*|потрапил\w*|слил\w*|злил\w*)\s+(?:у|в)\s+(?:мережі|мережу|сети|сеть|соцмереж\w*|соцсет\w*)|"
+                      r"(?:у|в)\s+(?:мережі|сети)\s+(?:з.яви\w*|поширю\w*|поширил\w*|появил\w*|распространя\w*|опублікува\w*|публику\w*)|користувачі\s+соцмереж|пользователи\s+соцсетей|відео\s+(?:з\s+)?соцмереж",
                       re.I)
-CUT = re.compile(r"\s+(?:що|чтобы|что|про|о|об|під\s+час|во\s+время|у\s+своєму|в\s+своем|в\s+ефірі|в\s+эфире|в\s+інтерв.ю|"
+CUT = re.compile(r"\s+(?:що|чтобы|что|про|о|об|після|после|в\s+свою\s+очередь|своєю\s+чергою|у\s+свою\s+чергу|під\s+час|во\s+время|у\s+своєму|в\s+своем|в\s+ефірі|в\s+эфире|в\s+інтерв.ю|"
                  r"в\s+интервью|на\s+брифінгу|на\s+брифинге|на\s+пресконференції|у\s+коментарі|в\s+комментарии|у\s+telegram|"
                  r"в\s+telegram|у\s+телеграм\w*|в\s+телеграм\w*|у\s+facebook|в\s+facebook|сьогодні|сегодня|вчора|вчера|"
                  r"зранку|утром|ввечері|вечером|минулої|прошлой|також|также|нібито|якобы|і\s+додав|и\s+добавил)\b.*$", re.I)
@@ -125,11 +138,17 @@ SELF = {
     "batalionmonako": r"монако|оперативн\w*\s+монітор", "suspilnenews": r"суспільн\w*", "ukrpravda_news": r"українськ\w*\s+правд\w*|\bуп\b",
     "TCH_channel": r"\bтсн\b", "uniannet": r"ун[іи]ан",
 }
+SELF_HANDLE_RX = re.compile(r"^(?:truexa|truekha|trukha|kiev_?info|kiev_operativ|novosty_kiev|ukrainaonl|uaonli|vanek|lachen|times_?ukr|kyiv_?times|"
+                            r"batalion_?monako|monako)", re.I)
 SELF_HANDLES = {"truexanewsua", "kievinfo_kyiv", "uaonlii", "vanek_nikolaev", "lachentyt", "times_ukraina", "batalionmonako",
                 "suspilnenews", "ukrpravda_news", "tch_channel", "uniannet", "novosty_kiev_bot", "truexausend_bot"}
 
 AD_STRONG = re.compile(r"#\s?реклам|#\s?ad\b|#\s?партнер|на\s+правах\s+реклами|партнерськ\w*\s+матеріал", re.I)
-AD_MARK = re.compile(r"промокод|розіграш\w*|розыгрыш\w*|казино|онлайн-казино|слоти\b|слоты\b|космолот|ставк\w*\s+на\s+спорт|"
+PHATIC = re.compile(r"^\W*(?:доброго\s+ранку|добрий\s+ранок|доброе\s+утро|бадьорого\s+ранку|гарного\s+дня|хорошего\s+дня|доброї\s+ночі|"
+                    r"спокійної\s+ночі|спокойной\s+ночи|без\s+слів|без\s+слов|дякую\s+всім|спасибо\s+всем|всім\s+привіт|всем\s+привет)", re.I)
+AD_MARK = re.compile(r"на\s+каналі\s+від|на\s+канале\s+от|у\s+своєму\s+блозі|в\s+своем\s+блоге|це\s+блог|это\s+блог|переходим\s+на\s+канал|"
+                     r"набір\s+на\s+(?:навчанн|курс)|набор\s+на\s+(?:обучени|курс)|оплата:\s*\d+|"
+                     r"отриму\w*\s+\d+\s*грн|получаем\s+\d+\s*грн|промокод|розіграш\w*|розыгрыш\w*|казино|онлайн-казино|слоти\b|слоты\b|космолот|ставк\w*\s+на\s+спорт|"
                      r"фрібет|фрибет|депозит\w*|трейдинг|заробіт\w*\s+від|заработ\w*\s+от|знижк\w*\s+до|скидк\w*\s+до|"
                      r"переходь\w*\s+за\s+посиланням|переходи\s+по\s+ссылке|ціни?\s+нижч|цены?\s+ниже|доставк\w*\s+по\s+україн|"
                      r"купуйте|замовляйте|оформлюй\w*|зареєструйся\s+(на|за)|зарегистрируйся\s+(на|по)|безкоштовн\w*\s+навчанн|"
@@ -184,13 +203,18 @@ class Attribution:
         words = len(re.findall(r"[^\W\d_]{2,}", text))
         if letters < 6 or words < 2:
             return "technical"
+        if len(text) < 140 and PHATIC.search(text) and not ALERT.search(text):
+            return "technical"
         if (len(text) < 500 and ALERT_STRONG.search(text)) or (len(text) < 300 and len(ALERT.findall(text)) >= 2):
             return "alert"
         return "informational"
 
     def promotional(self, raw: str, text: str) -> str:
         """no / ad / self_promo — окрема ознака (аудит v3.1: промо не перекриває змістовне повідомлення)."""
-        if AD_STRONG.search(raw or "") or len({m.group(0).lower()[:6] for m in AD_MARK.finditer(text)}) >= 2:
+        marks = {m.group(0).lower()[:6] for m in AD_MARK.finditer(text)}
+        if re.search(r"t\.me/(?:\+|joinchat/)", raw or "") and not SELF_PROMO.search(text):
+            marks.add("invite")   # запрошення в інший канал
+        if AD_STRONG.search(raw or "") or len(marks) >= 2:
             return "ad"
         if SELF_PROMO.search(text):
             return "self_promo"
@@ -253,7 +277,8 @@ class Attribution:
     def tidy(x: str) -> str:
         x = x.strip()
         for _ in range(4):
-            x = re.sub(rf"^(?:{SPEECH}|сам|сама|самі|сами|пише|ділиться|делится|про\s+це|об\s+этом|на\s+брифінгу|на\s+брифинге|"
+            x = re.sub(rf"^(?:{SPEECH}|тем\s+временем|тим\s+часом|между\s+тем|при\s+этом|при\s+цьому|однак|однако|проте|водночас|"
+                       rf"сам|сама|самі|сами|пише|ділиться|делится|про\s+це|об\s+этом|на\s+брифінгу|на\s+брифинге|"
                        rf"(?:йдеться|говориться|говорится|зазначається|отмечается|сказано|йдеться)\s+(?:у|в)\s+\w+|"
                        rf"(?:у|в)\s+(?:матеріалі|материале|заяві|заявлении|повідомленні|сообщении|звіті|отчете|публікації|публикации)|"
                        rf"брифінг\w*|брифинг\w*|пресреліз\w*|пресс-релиз\w*|прес-реліз\w*|у|в|во)\s+", "", x, flags=re.I)
@@ -262,12 +287,13 @@ class Attribution:
         toks, out, seen_cap = x.split(), [], False
         for t in toks:
             bare = t.strip("«»\"“”'(),.:;")
-            if seen_cap and bare and bare[0].islower() and bare.lower() not in ("з", "у", "в", "і", "та", "й", "и", "of", "de", "del", "der", "von", "the", "and", "при", "по"):
+            if seen_cap and bare and bare[0].islower() and bare.lower() not in ("з", "у", "в", "і", "та", "й", "и", "of", "de", "del", "der", "von", "the", "and", "при", "по",
+                                                                                 "фон", "ван", "де", "ла", "бен", "ібн", "ибн", "ді", "да", "дер", "аль", "эль"):
                 prev = out[-1].strip("«»\"“”'(),.:;") if out else ""
                 org_head = any(ORG_NOUN.match(o.strip("«»\"“”'(),.:;")) for o in out)
                 if not (ORG_NOUN.match(bare) and ADJ_END.search(prev.lower())) and not (org_head and len(out) < 7):
                     break
-            if bare[:1].isupper() or bare.startswith("@"):
+            if (bare[:1].isupper() or bare.startswith("@")) and not (not out and (ROLE_WORD.match(bare) or ROLE_ANY.match(bare))):
                 seen_cap = True
             out.append(t)
         x = " ".join(out)
@@ -275,7 +301,7 @@ class Attribution:
         x = re.sub(r"\s+", " ", x).strip(" «»\"“”'.,:;!?()[]-–—*_")
         if x.count('"') == 1:
             x = x + '"' if not x.startswith('"') else x[1:]
-        toks = x.split()[:7]
+        toks = x.split()[:8]
         while toks and toks[-1].lower() in ("з", "із", "у", "в", "і", "та", "й", "и", "and", "of", "при", "по", "на", "со", "с"):
             toks.pop()
         return " ".join(toks)
@@ -295,11 +321,13 @@ class Attribution:
         hit = lambda doms: any(h == d or h.endswith("." + d) or (d.startswith(".") and h.endswith(d)) for d in doms)
         if hit(NOT_SOURCE_DOM) or any(d in h for d in ("favbet", "cosmolot", "1xbet", "aliexpress")):
             return None
+        if h.startswith("petition.") or ".petition." in h or "petition" in h.split(".")[0]:
+            return {"domain": h, "entity": h, "platform_type": "other_site", "whitelist": False}  # ⚑6: петиції
         if h in ("t.me", "telegram.me"):
             path = p.path.strip("/").split("/")
             handle = (path[0] if path else "").lower()
             if not handle or handle.startswith("+") or handle in ("joinchat", "c", "boost", "addlist", "share") \
-                    or handle in SELF_HANDLES or handle.endswith("bot"):
+                    or handle in SELF_HANDLES or SELF_HANDLE_RX.match(handle) or handle.endswith("bot"):
                 return None
             return {"domain": "t.me", "entity": "@" + handle, "platform_type": "telegram_channel", "whitelist": False}
         for d, i in self.wl_domains:
@@ -388,7 +416,13 @@ class Attribution:
             return text[a:b if b >= 0 else len(text)]
 
         def add(x, pattern, level="direct", ctx="", force_cat=None):
+            x = re.sub(r"\b(т\.\s?)?в\.\s?о\.\s?", lambda m: ("т.в.о " if m.group(1) else "в.о "), x)
             if re.search(r"[.!?]\s|»\.|\.»", x):          # аудит (1): назва не може містити кінець речення
+                return
+            ms = re.match(r"^(?:[\w'’ʼ]+\s+)?(?:джерел\w*|источник\w*|співрозмовник\w*|собеседник\w*)\s+(?P<m>[A-ZА-ЯІЇЄҐ«\"][^\s].*)$", x.strip(), re.I)
+            if ms and level == "direct":
+                add(ms.group("m"), pattern, "direct", ctx)
+                add("джерела", "prep", "embedded", ctx, force_cat="anonymous")
                 return
             mm = MEDIUM.search(" " + x + " ")
             if mm:  # «український чиновник в коментарі The Economist на правах анонімності»: актор + видання-посередник
@@ -418,11 +452,12 @@ class Attribution:
                     for q in parts:
                         add(q, pattern, level, ctx)
                     return
-            if len(x.split()) > 6:
+            if len(x.split()) > 6 and len(self.tidy(x).split()) > 5 or len(x.split()) > 14:
                 return  # аудит (1): шматок речення, а не назва
             if force_cat is None and ANON_MARK.search(x) and pattern != "medium":
                 force_cat = "anonymous"
             locative = bool(re.match(r"^(?:у|в|во|на)\s+\S", x.strip(), re.I))
+            raw_x = x
             x = self.tidy(x)
             if len(x) < 2 or self_rx.search(x):
                 return
@@ -438,6 +473,19 @@ class Attribution:
             if cat in ("other", "ua_official", "company_organization") and RUSSIA.search(x) and \
                     re.search(r"рад[аиі]\b|совет|служб|міністерств|министерств|управлін|управлен|агентств|комітет|комитет|уряд|правительств|мзс|мид", x, re.I):
                 cat = "russian_official"  # «Рада безпеки рФ»
+            if re.search(r"депутат|нардеп|сенатор|конгресмен", x, re.I) and cat in ("foreign_official", "ua_official", "russian_official"):
+                cat = "politician"            # «депутат Європарламенту», «депутат Госдуми» — політики
+            if re.search(r"олен\w*\s+зеленськ|олен\w*\s+зеленск|^зеленськ(а|ої|ій|у)$|^зеленск(ая|ой|ую)$", x, re.I):
+                cat = "person_other"          # дружина президента — не посадовиця
+            jm = re.match(r"^(?:журналіст\w*|журналист\w*|кореспондент\w*|корреспондент\w*)\s+(?P<o>.+)$", x, re.I)
+            if jm and cat in ("unnamed_media", "other", "person_other"):
+                oc = self.classify(jm.group("o"))[0]
+                if oc.endswith("_media"):
+                    cat = oc                  # «журналіст «Голосу Америки» Яриш» → тип видання
+            if len(x.split()) == 1 and re.search(r"(ський|ский|цький|цкий|ний|ный)$", x.lower()) and cat in ("other", "foreign_official", "person_other"):
+                return                        # прикметник без іменника («Американский …»)
+            if pattern == "producer" and locative:
+                return                        # «зняли в районі Вишгорода» — місце, а не автор
             if KIN.match(x):
                 cat = "person_other"  # «Зять Шойгу» — родич, а не посадовець
             if cat in ("other", "ua_official") and GOV_GENERIC.search(x) and not re.search(r"україн|украин", x, re.I):
@@ -449,7 +497,23 @@ class Attribution:
                     cat = "foreign_official"   # «Великобритания не планирует…, по словам представителя правительства»
                 elif cat == "other" and RUSSIA.search(ctx) and not COUNTRY.search(ctx):
                     cat = "russian_official"
+            quoted_name = bool(re.match(r"^[«\"“]", raw_x.strip())) and len(x.split()) <= 4
+            if cat == "other" and ROLE_ANY.search(x) and not re.search(r"україн|украин", x, re.I):
+                if COUNTRY.search(x):
+                    cat = "foreign_official"   # «Государственный секретарь США Майк Помпео», «Президент Польщі Дуда»
+                elif RUSSIA.search(x):
+                    cat = "russian_official"
+            if cat == "other" and ROLE_ANY.search(x) and re.search(r"україн|украин", x, re.I):
+                cat = "ua_official"
+            keep_other = False
             if cat == "other":
+                if self.person_like(x) or (NAME_TAIL.search(x) and (ROLE_ANY.search(x.split()[0]) or ROLE_WORD.match(x) or len(x.split()) <= 3)):
+                    cat = "person_other"       # «директор медустанови Борис Тодуров», «журналист Андрей Цаплиенко»
+                elif pattern in ("signature", "prep") and DOC_WORD.match(x):
+                    keep_other = True          # документ як джерело: «— проєкт бюджету»
+                elif pattern in ("signature", "producer") and (quoted_name or re.fullmatch(r"[A-ZА-ЯІЇЄҐ][\w'’ʼ.\-]*(?:\s+[A-ZА-ЯІЇЄҐ0-9][\w'’ʼ.\-]*){0,2}", x)):
+                    keep_other = True          # власна назва в підписі: «— «VD»», «— Meteoagent»
+            if cat == "other" and not keep_other:
                 if self.person_like(x):
                     cat = "person_other"
                 elif re.search(r"\bрад[аи]\b|служб|компані|компани|фонд|асоціац|ассоциац|організац|организац|\bцентр|інститут|"
@@ -468,10 +532,10 @@ class Attribution:
                           "specificity": self.specificity(cat, x), "linked_destination": ""})
 
         lines = text.splitlines()
-        for ln in lines[:3] + lines[-2:]:
-            for rx in (P_SIGN, P_SIGN_HY):
+        for k, ln in enumerate(lines[:3] + lines[-2:]):
+            for rx in ((P_SIGN, P_SIGN_HY, P_SIGN_HY2) if k < 3 else (P_SIGN, P_SIGN_HY)):
                 m = rx.search(ln)
-                if m and (len(m.group("x").split()) <= 8 or NEST.search(" " + m.group("x") + " ") or MEDIUM.search(" " + m.group("x") + " ")):
+                if m and (len(self.tidy(m.group("x")).split()) <= 8 or NEST.search(" " + m.group("x") + " ") or MEDIUM.search(" " + m.group("x") + " ")):
                     add(m.group("x"), "signature", ctx=ln)
         for ln in lines:
             for m in P_SIGN_MID.finditer(ln):
@@ -495,6 +559,8 @@ class Attribution:
                     if len(found) > n0:
                         level = "embedded"
             add(m.group("x"), "prep", level, ctx_of(m.start()))
+        for m in P_CREDIT.finditer(text):  # «Відео: Стас Юрченко, Ґрати»
+            add(m.group("x"), "producer", ctx=ctx_of(m.start()))
         for m in P_PRODUCER.finditer(text):  # ⚑7: виробник поширюваного контенту — джерело
             add(m.group("x"), "producer", ctx=ctx_of(m.start()))
         for m in P_OUTLET.finditer(text):
@@ -502,11 +568,15 @@ class Attribution:
         text_nr = REL.sub("", text)  # без підрядних «…, которую возглавляет Порошенко, …»
         for rx, tag, src in ((P_IN, "in_org", text), (P_AFTER, "after", text), (P_BEFORE, "before", text_nr), (P_ROLE_BEFORE, "before", text_nr)):
             for m in rx.finditer(src):
+                if tag == "after" and re.match(r"(?i)(?:заклика|призва|призыва|назва|звинуват|обвин|показа|вимага|требу|погрож|угрожа|обіця|обеща|запевни|завери)", m.group(0)):
+                    continue  # після цих дієслів стоїть адресат, а не мовець («закликав військових …»)
                 add(m.group("x"), tag, ctx=src[src.rfind("\n", 0, m.start()) + 1:])
         if P_EYE.search(text) or re.search(r"#\s?нам\s?пишут", raw, re.I):
             add("підписники", "eyewitness")
         if P_SOCIAL.search(text):
             add("соцмережі", "social")
+        if self.promotional(raw, text) != "no":  # хендли каналів у промо-повідомленні — реклама, не джерело
+            found = [f for f in found if not re.match(r"^(?:t\.me/|@)", f["name"])]
         # платформа («написав у Facebook») — не актор, якщо в повідомленні є справжній актор (аудит v3.2)
         if any(not (f["type"] == "social" and BARE_PLATFORM.match(f["name"])) for f in found):
             found = [f for f in found if not (f["type"] == "social" and BARE_PLATFORM.match(f["name"]))]

@@ -207,3 +207,24 @@ def test_decision7_producer():
     r = run("‼️БУДАНОВ ДАВ ПОЯСНЕННЯ!\nКирило Олексійович (а точніше його ШІ-версія) пояснив, що відео зробили хлопці з каналу БАЗА, це Хʼюстон.")
     assert any(s["type"] == "telegram" and s["pattern"] == "producer" for s in r["attributed_sources"]), r["attributed_sources"]
     assert not run("Відео зробили вночі, коли було темно")["has_explicit_source"]
+
+
+def test_dev_round1_classes():
+    """Класи помилок із навчальної вибірки (validation/dev), не з валідаційної."""
+    names = lambda t: {s["name"]: s for s in run(t)["attributed_sources"]}
+    assert "Министр обороны ФРГ Кристина Ламбрехт" in names("Германия поможет.\nМинистр обороны ФРГ Кристина Ламбрехт обещает поставить 5 тысяч касок.")
+    n = names("Тем временем спикер ВРУ Стефанчук пообещал, что зимой нардепы будут работать")
+    assert any("Стефанчук" in k for k in n), n
+    assert names("Кличко сегодня рассказал о плане послабления карантина")
+    assert names("Covid-19 распространился из лаборатории - Помпео")
+    assert names("Це пробна зустріч, — Трамп про зустріч з Путіним на Алясці в п'ятницю.")
+    assert names("Відео: Стас Юрченко, Ґрати")
+    assert run("❗️Сообщают о взрывах в Сумской области")["has_explicit_source"]
+    assert run("Ужасные кадры избиения полицейских попали в сеть")["has_explicit_source"]
+    n = names("Два джерела Reuters в оточенні Макрона повідомили, що зустріч відбудеться")
+    assert n["Reuters"]["source_level"] == "direct", n
+    assert not run("Підписано петицію [тут](https://petition.president.gov.ua/petition/1)")["has_explicit_source"]
+    assert names("Мир неможливий, — Глава МИД Кулеба")["Глава МИД Кулеба"]["type"] == "ua_official"
+    assert names("Санкції потрібні, — депутат Європарламенту Віола фон Крамон")
+    assert run("Доброго ранку, Україно! Гарного дня")["content_type"] == "technical"
+    assert not run("Закон ухвалено.\nВідео зняли в районі Вишгорода Київської області")["has_explicit_source"]
