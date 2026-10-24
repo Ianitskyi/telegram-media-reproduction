@@ -1,7 +1,7 @@
 # Правила класифікації явної атрибуції джерела (v3.2, після другого аудиту ChatGPT)
 
 **Статус:** прототип, перевірений лише на вибірці. Повний корпус **не** запускається до ручної валідації та затвердження Андрієм.
-Код: `src/v3/attribution.py`, словники: `src/v3/gazetteer.py`, тести: `tests/test_attribution_v3.py` (18 тестів).
+Код: `src/v3/attribution.py`, словники: `src/v3/gazetteer.py`, тести: `tests/test_attribution_v3.py` (19 тестів).
 Приклади: `docs/ATTRIBUTION_EXAMPLES.md`, таблиця для позначок — `validation/attribution_examples_v3.csv`; вибірка — `validation/attribution_sample_v3.csv`.
 Ручна валідація: `validation/CODEBOOK_v3.md`, `validation/v3_validation_coding.xlsx`.
 
@@ -29,7 +29,7 @@
 
 ### Рівень джерела (v3.2)
 
-`source_level = direct` — на кого посилається сам канал; `embedded` — на кого посилається це джерело.
+`source_level = direct` — на кого посилається сам канал; `embedded` — на кого посилається це джерело; `intermediary` — видання, через яке передано слова актора («— український чиновник в коментарі The Economist на правах анонімності» → чиновник `direct`, `anonymous`; The Economist `intermediary`).
 «CBS News со ссылкой на американских чиновников» → CBS News `direct`, чиновники `embedded`; «— Радіо Свобода із посиланням на супутникові знімки» → Радіо Свобода `direct`, знімки `embedded`. Якщо перед «з посиланням на» джерела немає («З посиланням на джерела, …») — те, на що посилаються, вважається прямим. Основні показники RQ1–RQ4 рахуються за **прямими** джерелами; вкладені — окремий аналіз.
 
 ## 2. Джерело-актор vs пункт призначення посилання (нове у v3.1)
@@ -45,6 +45,8 @@
 | «…, — Autoconsulting» + посилання на Телеграф | Autoconsulting (`company_organization`) | telegraf.com.ua (`ua_media_site`) |
 | «…, – ОК «Південь». [Facebook](…)» | ОК «Південь» (`ua_official`) | facebook.com (`social_platform`) |
 | «Детальніше: [тут](pravda.com.ua/…)» (у тексті актора немає) | Українська правда — **виведено з посилання** (`actor_inferred_from_link`) | pravda.com.ua (`ua_media_site`, WL) |
+
+**Платформа ≠ актор (v3.2):** «Ермак написал в Facebook» → джерело Єрмак, Facebook не рахується; «— Twitter сейму» → джерело Сейм. Лише «пишуть у Twitter» без автора → `social`.
 
 Текстовий актор має **пріоритет**: актор виводиться з посилання лише тоді, коли в тексті джерела немає («— Yle» + посилання на tsn.ua → джерело Yle, а не ТСН). Атрибуція лише посиланням і текстова — різні рівні доказовості, тому звітуються окремо (`has_textual_source`, `attribution_method`).
 

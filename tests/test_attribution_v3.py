@@ -190,3 +190,14 @@ def test_v32_review():
     n = names("Владимир Зеленский и Белый дом заявили о новых гарантиях")
     assert {"Владимир Зеленский", "Белый дом"} <= set(n), n
     assert names("Мобілізація неминуча, — Рада безпеки рФ")["Рада безпеки рФ"]["type"] == "russian_official"
+
+
+def test_v32_audit_platform_and_intermediary():
+    """Третій аудит ChatGPT: платформа ≠ актор; анонімний чиновник через видання-посередника."""
+    names = lambda t: {s["name"]: s for s in run(t)["attributed_sources"]}
+    assert set(names("Ермак написал в Facebook, что переговоры продолжаются")) == {"Ермак"}
+    n = names("Польща закриє кордон, — Twitter сейму")
+    assert len(n) == 1 and list(n.values())[0]["type"] == "foreign_official", n
+    n = names("Наступ можливий восени, — український чиновник в коментарі The Economist на правах анонімності")
+    assert n["український чиновник"]["type"] == "anonymous" and n["The Economist"]["source_level"] == "intermediary", n
+    assert run("Пишуть у Twitter, що вибухи в Москві")["has_explicit_source"]  # лише платформа — лишається social

@@ -32,6 +32,14 @@ ROLE_START = (r"голова|глава|очільник\w*|керівник\w*|
 CAP = r"[A-ZА-ЯІЇЄҐ«\"“@]"
 _CYR, _LAT = "АВЕКМНОРСТХаеорсухіІ", "ABEKMHOPCTXaeopcyxiI"
 CYR2LAT, LAT2CYR = str.maketrans(_CYR, _LAT), str.maketrans(_LAT, _CYR)
+PLATFORM = (r"(?:facebook|фейсбук\w*|twitter|твіттер\w*|твиттер\w*|telegram|телеграм\w*|instagram|інстаграм\w*|инстаграм\w*|"
+            r"youtube|ютуб\w*|tiktok|тікток\w*|тикток\w*|threads|x)")
+P_PLATFORM_OWNER = re.compile(rf"^(?:у|в)?\s*{PLATFORM}(?:[\s-]+(?:канал\w*|акаунт\w*|аккаунт\w*|сторінк\w*|страниц\w*|блог\w*))?\s+(?P<o>[^\s].*)$", re.I)
+BARE_PLATFORM = re.compile(rf"^{PLATFORM}$", re.I)
+MEDIUM = re.compile(r"\s+(?:в|у)\s+(?:коментарі|комментарии|коментарях|комментариях|інтерв.ю|интервью|розмові|разговоре|ефірі|эфире|"
+                    r"колонці|колонке|статті|статье)\s+(?=[A-ZА-ЯІЇЄҐ«\"])", re.I)
+ANON_MARK = re.compile(r"анонімн|анонимн|побажав\w*\s+залишитис\w*\s+неназван|пожелавш\w*\s+остаться\s+неназванн|не\s+назвавш|"
+                       r"на\s+умовах\s+анонім|на\s+условиях\s+аноним", re.I)
 NEST = re.compile(r"\s+(?:(?:із|зі|з)\s+посиланням\s+на|со\s+ссылкой\s+на|посилаючись\s+на|ссылаясь\s+на)\s+", re.I)
 REL = re.compile(r",\s*(?:який|яка|яке|які|якого|якої|яку|котр\w+|который|которая|которое|которые|которого|которой|которую)\s[^,\n]{1,70},")
 KIN = re.compile(r"^(?:зят\w*|зять|син|сын|доч\w*|дружин\w*|жена|чолов\w*|муж|брат\w*|сестр\w*|тещ\w*|теща|кум\w*|онук\w*|внук\w*|родич\w*|родственни\w*|коханк\w*|любовни\w*)\s", re.I)
@@ -376,9 +384,21 @@ class Attribution:
             b = text.find("\n", pos)
             return text[a:b if b >= 0 else len(text)]
 
-        def add(x, pattern, level="direct", ctx=""):
+        def add(x, pattern, level="direct", ctx="", force_cat=None):
             if re.search(r"[.!?]\s|»\.|\.»", x):          # аудит (1): назва не може містити кінець речення
                 return
+            mm = MEDIUM.search(" " + x + " ")
+            if mm:  # «український чиновник в коментарі The Economist на правах анонімності»: актор + видання-посередник
+                xs = " " + x + " "
+                head, tail = xs[:mm.start()].strip(), xs[mm.end():].strip()
+                anon = "anonymous" if ANON_MARK.search(x) else None
+                if head:
+                    add(head, pattern, level, ctx, force_cat=anon)
+                    add(tail, "medium", "intermediary", ctx)
+                    return
+            po = P_PLATFORM_OWNER.match(x.strip())
+            if po and not re.match(r"(?:що|что|про|о|об)\b", po.group("o"), re.I):
+                x = po.group("o")  # «— Twitter сейму»: джерело — власник акаунта, платформа — лише місце
             m = NEST.search(" " + x + " ")
             if m:  # «Радіо Свобода із посиланням на супутникові знімки»: пряме джерело + вкладене
                 xs = " " + x + " "
@@ -397,12 +417,18 @@ class Attribution:
                     return
             if len(x.split()) > 6:
                 return  # аудит (1): шматок речення, а не назва
+            if force_cat is None and ANON_MARK.search(x) and pattern != "medium":
+                force_cat = "anonymous"
             locative = bool(re.match(r"^(?:у|в|во|на)\s+\S", x.strip(), re.I))
             x = self.tidy(x)
             if len(x) < 2 or self_rx.search(x):
                 return
             cat, wl = self.classify(x)
+            if force_cat:
+                cat, wl = force_cat, False
             if cat == "noise":
+                return
+            if pattern == "medium" and not cat.endswith("_media"):
                 return
             if cat == "ua_official" and re.match(r"(колишн|бывш|екс-?|экс-?)", x, re.I):
                 cat = "politician"   # колишні посадовці — політики (ATTRIBUTION_RULES §3)
@@ -433,7 +459,7 @@ class Attribution:
                 return  # двокрапка — лише для впізнаних акторів (рішення ⚑1), не для заголовків-тем
             if pattern == "before" and locative and cat in ("other", "person_other"):
                 return  # «В Волновахе ... сообщают» — місце, а не джерело
-            if pattern == "nest_direct" and cat == "other":
+            if pattern in ("nest_direct", "medium") and cat == "other":
                 return
             found.append({"name": x, "type": cat, "whitelist": wl, "pattern": pattern, "source_level": level,
                           "specificity": self.specificity(cat, x), "linked_destination": ""})
@@ -442,7 +468,7 @@ class Attribution:
         for ln in lines[:3] + lines[-2:]:
             for rx in (P_SIGN, P_SIGN_HY):
                 m = rx.search(ln)
-                if m and (len(m.group("x").split()) <= 8 or NEST.search(" " + m.group("x") + " ")):
+                if m and (len(m.group("x").split()) <= 8 or NEST.search(" " + m.group("x") + " ") or MEDIUM.search(" " + m.group("x") + " ")):
                     add(m.group("x"), "signature", ctx=ln)
         for ln in lines:
             for m in P_SIGN_MID.finditer(ln):
@@ -476,6 +502,9 @@ class Attribution:
             add("підписники", "eyewitness")
         if P_SOCIAL.search(text):
             add("соцмережі", "social")
+        # платформа («написав у Facebook») — не актор, якщо в повідомленні є справжній актор (аудит v3.2)
+        if any(not (f["type"] == "social" and BARE_PLATFORM.match(f["name"])) for f in found):
+            found = [f for f in found if not (f["type"] == "social" and BARE_PLATFORM.match(f["name"]))]
         actors = self._dedup(found)
 
         # пункти призначення посилань
@@ -510,6 +539,7 @@ class Attribution:
             "promotional": self.promotional(raw, text),
             "has_textual_source": has_text,
             "has_embedded_source": any(a.get("source_level") == "embedded" for a in actors),
+            "n_direct_sources": sum(a.get("source_level", "direct") == "direct" for a in actors + inferred),
             "in_primary_denominator": mtype in ("informational", "alert"),
             "has_explicit_source": has_text or has_link,
             "attribution_method": method,

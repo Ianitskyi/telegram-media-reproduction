@@ -865,7 +865,7 @@ UaOnlii,P2_2022_23,2022-11-16,41720,informational,informational,no,True,True,Tru
 UaOnlii,P2_2022_23,2023-02-10,46457,informational,informational,no,True,True,True,False,textual,1,Олег Крот [person_other; after; named],techiia-fund.org [other_site],person_other,"Дрони та генератори: до захисників доїхала чергова допомога від Олега Крота та «Фундації Течія»
 20 дронів DJI і 35 потужних генераторів купили на замовлення 59-ї окремої мотопіхотної бригади імені Якова Гандзюка. Підрозділи вже використовують безпілотники для розвідки, а генератори — для облаштування побуту та живлення командних пунктів. Загальна вартість техніки — понад 6,8 млн.
 «Воїни 59 бригади в листопаді 2022 року брали участь у боях на півдні та звільненні правобережжя Херсонщини, а зараз працюють на Донбасі. Упевнений, що з нашою підтримкою та підтримкою інших волонтерів вони принесуть для України ще багато хороших новин», — каже Олег Крот, директор «Фундації Течія» та керівний партне"
-UaOnlii,P2_2022_23,2023-03-03,47540,informational,informational,no,True,True,True,False,textual,1,ГУР [ua_official; prep; named],,ua_official,"Власти Украины знали об операции «Русского добровольческого корпуса» в Брянской области, — командир формирования Капустин в интервью Financial  Times
+UaOnlii,P2_2022_23,2023-03-03,47540,informational,informational,no,True,True,True,False,textual,2,Financial Times [foreign_media; medium; named; ПОСЕРЕДНИК] | ГУР [ua_official; prep; named],,foreign_media;ua_official,"Власти Украины знали об операции «Русского добровольческого корпуса» в Брянской области, — командир формирования Капустин в интервью Financial  Times
 Операция была согласована с украинскими властями, «иначе она просто не могла бы пройти», а в операции участвовали около 45 человек, в том числе члены «партизанской сети на территории России».
 Также по информации ГУР, часть местных жителей Брянской области уже присоединилась к РДК."
 UaOnlii,P2_2022_23,2022-06-25,31621,informational,informational,no,True,True,True,False,textual,1,Начальник ГУР Буданов [ua_official; before; named],,ua_official,"Начальник ГУР Буданов заявил, что переломный момент в войне произойдет в августе, а к концу года боевые действия снизятся практически до нуля
@@ -875,7 +875,7 @@ UaOnlii,P2_2022_23,2022-06-25,31621,informational,informational,no,True,True,Tru
 📍к концу года активные боевые действия снизятся практически до нуля;
 📍мы возобновим контроль над своими территориями уже в обозримом будущем."
 UaOnlii,P2_2022_23,2022-10-08,38791,informational,informational,no,True,False,False,False,none,0,,,,❗️Еще один момент взрыва на Крымском мосту
-UaOnlii,P2_2022_23,2022-03-10,21881,informational,informational,no,True,True,True,False,textual,1,Джонсон [foreign_official; signature; named; = Премьер-министр Великобритании],,foreign_official,"Премьер-министр Великобритании заявил, что опасается, что Россия может применить химическое оружие в Украине.
+UaOnlii,P2_2022_23,2022-03-10,21881,informational,informational,no,True,True,True,False,textual,2,Sky News [foreign_media; medium; named; ПОСЕРЕДНИК] | Джонсон [foreign_official; signature; named; = Премьер-министр Великобритании],,foreign_media;foreign_official,"Премьер-министр Великобритании заявил, что опасается, что Россия может применить химическое оружие в Украине.
 «То, что вы слышите о химическом оружии, прямо из их сценария», - сказал Джонсон в интервью Sky News.
 «Они начинают говорить, что есть химическое оружие, которое хранилось их противниками или американцами. И поэтому, когда они сами развертывают химическое оружие - как я опасаюсь, они могут - у них есть своего рода маскировка [российский военный обман] фальшивой истории, готовой к работе», - добавил он."
 UaOnlii,P2_2022_23,2022-09-19,37604,informational,informational,no,True,True,True,False,textual,1,Масси Найем [person_other; before; named],,person_other,"Российский «Альфа-Банк Украина»: в чьих интересах действует доверенное лицо Дянков?
@@ -1423,7 +1423,7 @@ lachentyt,P2_2022_23,2023-01-03,25125,informational,informational,no,True,False,
 Вони у Дружківці розбомбили льодову арену, на якій був один сторож, який, слава Богу, не постраждав.
 А вони вже там по своїм каналам знищили хімарс, техніку, мільйон ЗСУ та драконів."
 lachentyt,P2_2022_23,2022-08-20,17746,informational,informational,no,True,False,False,False,none,0,,,,Усик переміг
-lachentyt,P2_2022_23,2023-06-16,30482,informational,informational,no,True,True,True,False,textual,1,Twitter [social; signature; generic],,social,"Сейм Польщі підтримав членство України в НАТО, ухваливши відповідну резолюцію, — Twitter сейму."
+lachentyt,P2_2022_23,2023-06-16,30482,informational,informational,no,True,True,True,False,textual,1,сейму [foreign_official; signature; named],,foreign_official,"Сейм Польщі підтримав членство України в НАТО, ухваливши відповідну резолюцію, — Twitter сейму."
 lachentyt,P2_2022_23,2022-05-24,12280,informational,informational,no,True,True,True,False,textual,1,представителя правительства [foreign_official; prep; named],,foreign_official,"Великобритания не планирует отправлять военные корабли Королевского военно-морского флота в Черное море, чтобы помочь вывезти продовольственные товары, такие как зерно, из блокированного украинского порта Одесса, по словам представителя правительства.
 Эх"
 lachentyt,P2_2022_23,2022-10-15,20990,informational,informational,no,True,False,False,False,none,0,,,,"Дякую всім за кожен донат та репост, українці це сила
@@ -1612,7 +1612,7 @@ times_ukraina,P1_pre,2020-06-11,994,informational,informational,no,True,False,Fa
 Вылечились - 13 141 человек;
 Всего за весь период пандемии в Украине - 29 070 случаев заражения.
 Статистика за 10.06"
-times_ukraina,P1_pre,2021-11-30,5985,informational,informational,no,True,True,True,False,textual,2,Facebook [social; after; generic] | Ермак [ua_official; before; named],,social;ua_official,"Андрей Ермак побывал на допросе по делу ""вагнеровцев"".
+times_ukraina,P1_pre,2021-11-30,5985,informational,informational,no,True,True,True,False,textual,1,Ермак [ua_official; before; named],,ua_official,"Андрей Ермак побывал на допросе по делу ""вагнеровцев"".
 Об этом сам Ермак написал в Facebook
 ""Не считаю нужным делать из этого шоу, поэтому камеры не звал"", - объяснил он скромность в освещении данного события."
 times_ukraina,P1_pre,2021-02-19,3054,informational,informational,no,True,False,False,False,none,0,,,,"57,1% украинцев не поддержали бы повторное выдвижение Зеленского на выборах в 2024
@@ -2098,7 +2098,7 @@ batalionmonako,P3_2024_26,2025-12-20,52308,informational,informational,no,True,T
 Залишайся в курсі — підпишись на політичні інсайди:"
 batalionmonako,P3_2024_26,2025-08-01,44417,informational,informational,no,True,True,True,False,textual,2,Командувач ССО РБ Вадим Денисенко [ua_official; before; named] | росЗМІ [unnamed_media; signature; generic],,ua_official;unnamed_media,"❗️🪖 Білорусь формує нову армійську бригаду ССО на кордоні з Україною, - пишуть росЗМІ
 Вона базуватиметься в Гомельській області. Командувач ССО РБ Вадим Денисенко заявив, що це «так би мовити, неспокійний напрямок, який тримує всіх нас у тонусі»."
-batalionmonako,P3_2024_26,2025-02-13,34898,informational,informational,no,True,True,False,False,hyperlink,1,economist.com [foreign_media; link_only; named; →economist.com; АКТОР З ПОСИЛАННЯ],economist.com [foreign_media_site],foreign_media,"Україна в сраці. І, до речі, Європа теж, — український чиновник в коментарі The Economist на правах анонімності"
+batalionmonako,P3_2024_26,2025-02-13,34898,informational,informational,no,True,True,True,False,both,2,український чиновник [anonymous; signature; anonymous] | The Economist [foreign_media; medium; named; →economist.com; ПОСЕРЕДНИК],economist.com [foreign_media_site],anonymous;foreign_media,"Україна в сраці. І, до речі, Європа теж, — український чиновник в коментарі The Economist на правах анонімності"
 batalionmonako,P3_2024_26,2024-11-09,29750,informational,informational,no,True,True,True,False,textual,1,Віталій Кличко [ua_official; signature; named],,ua_official,"Кличко привіз чотирьом бригадам на передову безпілотники від столичної громади
 Мер Києва Віталій Кличко привіз 4 бригадам на Донбас безпілотники різних типів:
 ▪️28 окремій механізованій бригаді – 300 нічних FPV-дронів.
