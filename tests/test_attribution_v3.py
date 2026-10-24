@@ -23,6 +23,7 @@ NO_SOURCE = [
     "Вибухи в Харкові. В укриття!",
     "❗️Ще одна ціль на Харків",
     "Збили людину на вул. Героїв полку Азов, швидка прямує на місце.",
+    "СБУ затримала агента рф у Харкові",
 ]
 
 EXPECT = [
@@ -52,6 +53,14 @@ EXPECT = [
     ("Затримано підозрюваного, — президент Володимир Зеленський.", "ua_official"),
     ("У путіна є 10 годин, – речник німецького уряду Корнеліус.", "foreign_official"),
     ("Кінець 2024 року. За словами західного дипломата, переговори можливі", "anonymous"),
+    ("Генштаб: противник втратив 1200 осіб за добу", "ua_official"),
+    ("Українці спустошили автосалони, — Autoconsulting", "company_organization"),
+    ("Протест проти уряду, — Беларускі Гаюн", "telegram"),
+    ("Росія готує наступ, — Резніков", "ua_official"),
+    ("Переговоры невозможны, — МИД России", "russian_official"),
+    ("Росія втрачає темп, — ISW", "expert"),
+    ("Закон ухвалено, — Рада", "ua_official"),
+    ("Війна триватиме, — радник керівника Офісу Президента Олексій Арестович", "ua_official"),
 ]
 
 
@@ -87,3 +96,38 @@ def test_link_and_method():
 def test_message_type():
     assert run("Космолот: зареєструйся і отримай бонус! #реклама")["message_type"] == "ad"
     assert run("2 шахеди курсом на Київ, в укриття")["message_type"] == "alert"
+
+
+def test_actor_vs_destination():
+    """Аудит: посилання — пункт призначення, а не джерело-актор."""
+    r = run("США просять Японію передати ракети, — The Washington Post. [Детальніше](https://nv.ua/ukr/world/x.html)")
+    names = {s["name"]: s for s in r["attributed_sources"]}
+    assert "The Washington Post" in names and names["The Washington Post"]["type"] == "foreign_media", r["attributed_sources"]
+    assert not any(s.get("actor_inferred_from_link") for s in r["attributed_sources"])
+    assert r["linked_destinations"][0]["platform_type"] == "ua_media_site"
+    r = run("Ворог готується до атак, – ОК «Південь».\n[Facebook](https://www.facebook.com/okpivden/posts/1)")
+    assert {s["type"] for s in r["attributed_sources"]} == {"ua_official"}, r["attributed_sources"]
+    assert r["linked_destinations"][0]["platform_type"] == "social_platform"
+    r = run("Меланія передала листа, – [Reuters](https://www.reuters.com/world/x).")
+    assert r["attributed_sources"][0]["linked_destination"] == "reuters.com", r
+
+
+def test_dedup():
+    r = run("Пресслужба СБУ повідомила про затримання. СБУ заявила, що агент діяв з 2022 року")
+    assert sum(1 for s in r["attributed_sources"] if "СБУ" in s["name"]) == 1, r["attributed_sources"]
+    r = run("Міністр Максим Степанов заявив про карантин. Міністр також повідомив про вакцини")
+    assert len(r["attributed_sources"]) == 1, r["attributed_sources"]
+
+
+def test_ad_false_positives():
+    assert run("Окупанти поширюють знімки у ворожих каналах, — голова ЦПД Коваленко")["message_type"] == "informational"
+    assert run('Telegram — загроза, — Буданов. "Хочеш вести новини - зареєструйся", — додав він')["message_type"] == "informational"
+
+
+def test_audit_round2():
+    names = lambda t: [s["name"] for s in run(t)["attributed_sources"]]
+    assert names("Мир можливий, — йдеться у матеріалі New York Times") == ["New York Times"], names("Мир можливий, — йдеться у матеріалі New York Times")
+    assert not any("Волновах" in n for n in names("В Волновахе Донецкой области сообщают о взрывах"))
+    assert not run("Российский «Альфа-Банк Украина»: в чьих интересах действует банк")["has_explicit_source"]
+    r = run("Пакет допомоги, — пресреліз Пентагону. [Детальніше](https://www.defense.gov/News/1)")
+    assert r["linked_destinations"][0]["platform_type"] == "foreign_official_site", r["linked_destinations"]
