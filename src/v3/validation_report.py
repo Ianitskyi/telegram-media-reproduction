@@ -302,6 +302,16 @@ def main() -> None:
     queue = {q["item_id"]: q for q in json.loads((HUMAN / "review_queue.json").read_text(encoding="utf-8"))}
     reviews = load_reviews()
     ans = {c: load(c) for c in CODERS}
+    # ⚑8: повідомлення з прихованим запрошенням Claude закодував повторно наосліп за інструкцією v2 (з правилом ⚑8);
+    # для оцінки основного інструмента береться саме це кодування (ту саму інструкцію буде застосовано до корпусу)
+    recode = ROOT / "validation" / "llm" / "claude" / "batch_F8.jsonl"
+    if recode.exists():
+        from src.v3.blind_io import check
+        recs, prob = check(recode)
+        if prob:
+            raise ValueError(f"повторне кодування ⚑8 має проблеми формату: {prob[:3]}")
+        for o in recs:
+            ans["claude"][o["item_id"]] = o
     strata["part"] = strata.subsample.str[0]
     sel = strata[strata.selected]
     incomplete = {p: [i for i in sel[sel.part == p].item_id if not is_complete(reviews.get(i))] for p in ("A", "B")}
@@ -351,7 +361,9 @@ def main() -> None:
     kap = {}
     for f_, get in (("content_type", lambda o: o["content_type"]), ("has_explicit_source", lambda o: bool(o["has_explicit_source"])),
                     ("promotional", lambda o: o["promotional"]), ("знаменник", in_denominator)):
-        kap[f"Claude ↔ ChatGPT, {f_} (усі)"] = kappa([get(ans["claude"][i]) for i in ids], [get(ans["chatgpt"][i]) for i in ids])
+        ids_ = [i for i in ids if not (f_ in ("promotional", "знаменник") and i in flag8)]
+        kap[f"Claude ↔ ChatGPT, {f_} (усі{', без ⚑8' if len(ids_) < len(ids) else ''})"] = kappa(
+            [get(ans["claude"][i]) for i in ids_], [get(ans["chatgpt"][i]) for i in ids_])
     pre = {i: r for i, r in reviews.items() if r.get("q1_initial") in ("yes", "no") or r.get("pre")}
     def pre_get(r, f_):
         p = r.get("pre") or {}
