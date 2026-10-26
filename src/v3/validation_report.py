@@ -32,6 +32,8 @@ import pandas as pd
 from src.v3.adjudication import CODERS, HUMAN, fields, in_denominator, load, same_name
 
 ROOT = Path(__file__).resolve().parents[2]
+# Інструмент, точність якого оцінюється (⚑11: основний — LLM Claude). Інші: algorithm, chatgpt — для порівняння.
+PRIMARY = __import__("os").environ.get("PRIMARY", "claude")
 B_REPS, SEED = 1000, 20261025
 THRESHOLDS = [  # (назва, поріг, поріг нижньої межі CI або None)
     ("has_explicit_source precision (A)", 0.95, 0.90),
@@ -150,7 +152,7 @@ def summarize(S) -> dict:
         "denominator accuracy (A)": ratio(S["den_ok"], S["den_n"]),
         "substantive recall (A)": ratio(S["subst_hit"], S["subst_n"]),
         "prevalence: reference (A)": ratio(S["src_tp"] + S["src_fn"], S["src_tp"] + S["src_fn"] + S["src_fp"] + S["src_tn"]),
-        "prevalence: algorithm (A)": ratio(S["src_tp"] + S["src_fp"], S["src_tp"] + S["src_fn"] + S["src_fp"] + S["src_tn"]),
+        "prevalence: instrument (A)": ratio(S["src_tp"] + S["src_fp"], S["src_tp"] + S["src_fn"] + S["src_fp"] + S["src_tn"]),
         "attribution method accuracy (A)": ratio(S["method_ok"], S["den_n"]),
         "content type accuracy (A)": ratio(S["content_ok"], S["den_n"]),
         "nested source accuracy (A)": ratio(S["nested_ok"], S["den_n"]),
@@ -312,7 +314,7 @@ def main() -> None:
     for i in sel.item_id:
         if is_complete(reviews.get(i)):
             refs[i] = reference(queue[i], reviews[i])
-            metrics[i] = item_metrics(fields(ans["algorithm"][i]), refs[i])
+            metrics[i] = item_metrics(fields(ans[PRIMARY][i]), refs[i])
 
     A = strata[strata.part == "A"]
     RAW_TYPE_N.clear()
@@ -337,7 +339,7 @@ def main() -> None:
 
     # суттєві помилки серед перевірених одностайних (лише U-страти; ⚑8-страта F — окремо)
     def substantial(it, ref):
-        p = fields(ans["algorithm"][it])
+        p = fields(ans[PRIMARY][it])
         return (p["has_explicit_source"] != ref["has_explicit_source"] or in_denominator(p) != in_denominator(ref)
                 or len(match(ref["direct_sources"], p["direct_sources"])) != max(len(ref["direct_sources"]), len(p["direct_sources"])))
     uni = [i for i in sel[sel.stratum.str.startswith("U_")].item_id if i in refs]
@@ -368,7 +370,7 @@ def main() -> None:
     # звіт
     f = lambda x: "—" if x != x else f"{x:.3f}"
     a_done = not incomplete["A"]
-    lines = ["# Валідація класифікатора атрибуції v3.3 (AI-assisted coding з людською перевіркою)", "",
+    lines = [f"# Валідація основного інструмента кодування: {PRIMARY} (AI-assisted coding з людською перевіркою)", "",
              f"Вибірка (без V0001–V0100, витік): {len(strata)} повідомлень; страти: {strata.stratum.value_counts().to_dict()}.",
              f"До перевірки: A {int((sel.part == 'A').sum())}, B {int((sel.part == 'B').sum())}. "
              f"Незавершено: A {len(incomplete['A'])}, B {len(incomplete['B'])}; з них «не впевнений»: {len(unsure)}.", ""]
