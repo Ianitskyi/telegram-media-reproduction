@@ -33,7 +33,7 @@ FOREIGN_MEDIA = [
     r"the\s*sun\b", r"rmf\s*fm", r"onet", r"rzeczpospolita", r"gazeta\s*wyborcza", r"\bpap\b", r"corriere", r"la\s*repubblica",
     r"el\s*pa[ií]s", r"nhk", r"kyodo", r"yonhap", r"times\s*of\s*israel", r"haaretz", r"al\s*jazeera", r"anadolu",
     r"голос америки", r"holosameryky", r"challenges", r"voice\s*of\s*america", r"\bvoa\b", r"radio\s*liberty", r"rfe/?rl", r"sonntags", r"nzz",
-    r"helsingin", r"\b(?:post|news|times|journal|herald|tribune|gazette|daily|radio|press|magazine|review|today|chronicle|observer|monitor|telegraph)\b", r"\birna\b", r"\bввс\b", r"\bnature\b", r"\bscience\b", r"\blancet\b", r"yle\b", r"\bsvt\b", r"dagens", r"\bpolitiken\b", r"the\s*hill", 
+    r"helsingin", r"the\s+conversation", r"\brmf\s*24\b", r"wyborcz", r"\bpap\b", r"\bdelfi\b", r"\blrt\b", r"\byle\b", r"\b(?:post|news|times|journal|herald|tribune|gazette|daily|radio|press|magazine|review|today|chronicle|observer|monitor|telegraph)\b", r"\birna\b", r"\bввс\b", r"\bnature\b", r"\bscience\b", r"\blancet\b", r"yle\b", r"\bsvt\b", r"dagens", r"\bpolitiken\b", r"the\s*hill", 
 ]
 
 RUSSIAN_MEDIA = [
@@ -154,7 +154,7 @@ NOISE = [
     r"нагадаємо|напомним|водночас|одночасно|крім\s+того|кроме\s+того|серед|среди|за\s+його|по\s+его|його|ее|її|их|їх)\b",
     r"громк", r"слышн", r"укритт", r"укрыти", r"відбій", r"отбой", r"тривог", r"тревог", r"небезпек", r"опасност", r"^\d+[\d\s:.,]*$",
     r"^(в|у)\s+укриття", r"^уважно", r"^слідкуйте", r"^подробиці", r"^детал", r"^читайте", r"^дивіться", r"^смотрите", r"^відео",
-    r"^видео", r"^фото", r"^upd", r"^оновлено", r"^обновлено", r"^ура", r"^жесть", r"^ахаха", r"^шок", r"^пізд", r"^оце", r"^ну\b",
+    r"^видео", r"^фото", r"^головне$", r"^главное$", r"^важливо$", r"^важно$", r"^увага$", r"^внимание$", r"^терміново$", r"^срочно$", r"^підсумки", r"^итоги", r"^upd", r"^оновлено", r"^обновлено", r"^ура", r"^жесть", r"^ахаха", r"^шок", r"^пізд", r"^оце", r"^ну\b",
 ]
 
 ORDER = [

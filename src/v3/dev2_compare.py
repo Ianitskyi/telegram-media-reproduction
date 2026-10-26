@@ -46,7 +46,8 @@ def main():
                 "sources": [{"name": s["name"], "type": s["type"], "specificity": s["specificity"], "level": s.get("source_level", "direct"),
                              "method": "link" if s.get("actor_inferred_from_link") else "text", "pattern": s["pattern"]} for s in a["attributed_sources"]],
                 "destinations": [{"domain": d["domain"], "platform_type": d["platform_type"]} for d in a["linked_destinations"]]}
-    cl, gp = load_coder("claude"), load_coder("chatgpt")
+    cl = load_coder("claude")
+    gp = load_coder("chatgpt") if (D / "chatgpt").exists() and os.environ.get("SINGLE") != "1" else cl  # SINGLE=1: лише Claude
     txt = items.set_index("item_id")
     ids = sorted(set(cl) & set(gp))
     cons = [i for i in ids if not key_diff(cl[i], gp[i])]
