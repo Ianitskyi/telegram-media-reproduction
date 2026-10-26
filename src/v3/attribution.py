@@ -237,7 +237,7 @@ class Attribution:
         """no / ad / self_promo — окрема ознака (аудит v3.1: промо не перекриває змістовне повідомлення)."""
         marks = {m.group(0).lower()[:6] for m in AD_MARK.finditer(text)}
         if re.search(r"t\.me/(?:\+|joinchat/)", raw or "") and not SELF_PROMO.search(text):
-            marks.add("invite")   # запрошення в інший канал
+            return "ad"   # ⚑8 (Андрій, 2026-10-26): приховане запрошення в інший канал = реклама
         if AD_STRONG.search(raw or "") or len(marks) >= 2:
             return "ad"
         if SELF_PROMO.search(text):
@@ -438,7 +438,8 @@ class Attribution:
         raw = msg.get("text") or ""
         text, urls = self.body(raw, boiler)
         text = self.fix_homoglyphs(text)
-        mtype = self.message_type(raw, text)
+        body_raw = text + "\n" + "\n".join(urls)  # без рядків-футерів каналу (їхні запрошення — не реклама в повідомленні)
+        mtype = self.message_type(body_raw, text)
         self_rx = re.compile(SELF.get(channel, r"(?!x)x"), re.I)
         found = []
 
@@ -641,7 +642,7 @@ class Attribution:
             add("підписники", "eyewitness")
         if P_SOCIAL.search(text):
             add("соцмережі", "social")
-        if self.promotional(raw, text) != "no":  # хендли каналів у промо-повідомленні — реклама, не джерело
+        if self.promotional(body_raw, text) != "no":  # хендли каналів у промо-повідомленні — реклама, не джерело
             found = [f for f in found if not re.match(r"^(?:t\.me/|@)", f["name"])]
         # платформа («написав у Facebook») — не актор, якщо в повідомленні є справжній актор (аудит v3.2)
         if any(not (f["type"] == "social" and BARE_PLATFORM.match(f["name"])) for f in found):
@@ -679,9 +680,9 @@ class Attribution:
         method = "both" if has_text and has_link else "textual" if has_text else "hyperlink" if has_link else "none"
         return {
             "message_type": mtype,
-            "content_type": ("technical" if self.promotional(raw, text) != "no" and not self.substantive_besides_promo(text)
+            "content_type": ("technical" if self.promotional(body_raw, text) != "no" and not self.substantive_besides_promo(text)
                              and mtype in ("ad", "self_promo") else self.content_type(text)),
-            "promotional": self.promotional(raw, text),
+            "promotional": self.promotional(body_raw, text),
             "has_textual_source": has_text,
             "has_embedded_source": any(a.get("source_level") == "embedded" for a in actors),
             "n_direct_sources": sum(a.get("source_level", "direct") == "direct" for a in actors + inferred),

@@ -228,3 +228,8 @@ def test_dev_round1_classes():
     assert names("Санкції потрібні, — депутат Європарламенту Віола фон Крамон")
     assert run("Доброго ранку, Україно! Гарного дня")["content_type"] == "technical"
     assert not run("Закон ухвалено.\nВідео зняли в районі Вишгорода Київської області")["has_explicit_source"]
+
+
+def test_decision8_hidden_invite_is_ad():
+    r = run("Україна не визнаватиме боргом допомогу, — Зеленський. У [Києві](https://t.me/+d-DQei6Zq-swYzBi) зустріч")
+    assert r["promotional"] == "ad" and not r["in_primary_denominator"], r

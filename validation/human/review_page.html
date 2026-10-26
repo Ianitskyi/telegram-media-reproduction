@@ -1,0 +1,323 @@
+<title>Перевірка атрибуції</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one message at a time — message on top, the coder's question, then anonymous variants side by side */
+:root{
+  --bg:#f3f5f7; --surface:#ffffff; --ink:#18212b; --muted:#5b6876; --line:#d9dfe6;
+  --accent:#1f5f8b; --accent-ink:#ffffff; --accent-soft:#e3eef6;
+  --ok:#2e7d4f; --ok-soft:#e2f2e8; --warn:#9a6a00; --warn-soft:#fbf1d8; --bad:#a63d32; --bad-soft:#f8e3e0;
+  --font:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12171d; --surface:#1a2129; --ink:#e4e9ee; --muted:#93a1ae; --line:#2c3743;
+  --accent:#6aa8d6; --accent-ink:#0d1620; --accent-soft:#1d3346;
+  --ok:#6cc08f; --ok-soft:#173225; --warn:#e0b450; --warn-soft:#3a2f12; --bad:#e78a7e; --bad-soft:#3d201c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12171d; --surface:#1a2129; --ink:#e4e9ee; --muted:#93a1ae; --line:#2c3743;
+  --accent:#6aa8d6; --accent-ink:#0d1620; --accent-soft:#1d3346;
+  --ok:#6cc08f; --ok-soft:#173225; --warn:#e0b450; --warn-soft:#3a2f12; --bad:#e78a7e; --bad-soft:#3d201c; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px 48px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+header.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:10px 14px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px}
+.title{font-weight:600;font-size:16px}
+.progress{flex:1 1 220px;min-width:0;display:flex;flex-direction:column;gap:4px}
+.progress .nums{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.meter{height:6px;background:var(--line);border-radius:3px;overflow:hidden;position:relative}
+.meter i{position:absolute;inset:0 auto 0 0;background:var(--accent);border-radius:3px}
+.meter b{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);opacity:.5}
+.nav{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:7px 12px}
+button:hover{border-color:var(--accent)}
+button:focus-visible,select:focus-visible,textarea:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:500}
+button.sel{background:var(--accent-soft);border-color:var(--accent);font-weight:600}
+input[type=number]{width:84px;font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font-variant-numeric:tabular-nums}
+.status{font-size:13px;color:var(--muted)}
+.status.saved{color:var(--ok)} .status.err{color:var(--bad)}
+.banner{background:var(--warn-soft);color:var(--warn);border-radius:8px;padding:8px 12px;font-size:14px}
+.msg{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.meta{font-family:var(--mono);font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 14px}
+.meta .done{color:var(--ok)}
+.text{white-space:pre-wrap;overflow-wrap:anywhere;max-width:75ch;font-size:15.5px}
+.text .lnk{font-family:var(--mono);font-size:12px;color:var(--accent);background:var(--accent-soft);border-radius:4px;padding:0 4px;margin-left:2px;word-break:break-all}
+.step{display:flex;flex-direction:column;gap:10px}
+.q{font-weight:600;font-size:15.5px}
+.qrow{display:flex;gap:8px;flex-wrap:wrap}
+.hint{font-size:13px;color:var(--muted)}
+.variants{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.var{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.var.chosen{border-color:var(--ok);box-shadow:0 0 0 2px var(--ok-soft)}
+.var h3{margin:0;font-size:14px;display:flex;align-items:center;gap:8px}
+.letter{font-family:var(--mono);font-weight:500;width:26px;height:26px;border-radius:6px;background:var(--accent-soft);color:var(--accent);display:inline-grid;place-items:center}
+dl{margin:0;display:grid;grid-template-columns:max-content 1fr;gap:4px 10px;font-size:14px}
+dt{color:var(--muted)} dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.diff dt{color:var(--warn)} .diff dd{font-weight:600}
+ul.src{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:2px}
+.type{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.none{color:var(--muted);font-style:italic}
+.edit{background:var(--surface);border:1px dashed var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.edit label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted)}
+.edit .row{display:flex;gap:12px;flex-wrap:wrap}
+select,textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 8px}
+textarea{min-height:76px;width:100%;resize:vertical}
+details.rules{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+details.rules summary{cursor:pointer;font-weight:600}
+details.rules ul{margin:8px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:4px;max-width:85ch}
+.kbd{font-family:var(--mono);font-size:12px;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 4px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="bar">
+    <span class="title">Перевірка атрибуції</span>
+    <div class="progress">
+      <div class="meter" aria-hidden="true"><i id="meterFill" style="width:0%"></i><b id="meterMark" style="left:0%"></b></div>
+      <div class="nums" id="nums">Завантаження черги…</div>
+    </div>
+    <div class="nav">
+      <button id="prev" title="Попереднє (←)">← Попереднє</button>
+      <button id="next" title="Наступне (→)">Наступне →</button>
+      <button id="todo">До неперевіреного</button>
+      <label class="hint" for="jump">№</label><input type="number" id="jump" min="1" step="1" aria-label="Перейти до номера">
+    </div>
+    <span class="status" id="status"></span>
+  </header>
+
+  <div class="banner" id="noDb" hidden>Збереження недоступне в цьому перегляді. Відкрийте сторінку за її посиланням на claude.ai, щоб рішення зберігалися.</div>
+
+  <section class="msg" aria-live="polite">
+    <div class="meta" id="meta"></div>
+    <div class="text" id="text">Повідомлення з'явиться, щойно завантажиться черга.</div>
+  </section>
+
+  <section class="step" id="step1">
+    <div class="q">1. Чи дає канал зрозуміти, звідки ця інформація?</div>
+    <div class="qrow">
+      <button data-q1="yes">Так, джерело є <span class="kbd">1</span></button>
+      <button data-q1="no">Ні, джерела немає <span class="kbd">2</span></button>
+      <button data-q1="unsure">Не впевнений <span class="kbd">3</span></button>
+    </div>
+    <div class="hint">Спершу ваша власна відповідь. Варіанти кодування з'являться після неї.</div>
+  </section>
+
+  <section class="step" id="step2" hidden>
+    <div class="q">2. Який варіант кодування правильний?</div>
+    <div class="hint" id="fieldsHint"></div>
+    <div class="variants" id="variants"></div>
+    <div class="qrow">
+      <button id="editBtn">Жоден не правильний — виправити <span class="kbd">E</span></button>
+      <button id="unsureBtn">Не впевнений, позначити <span class="kbd">U</span></button>
+    </div>
+    <div class="edit" id="edit" hidden>
+      <div class="row">
+        <label for="eContent">Зміст
+          <select id="eContent"><option value="informational">змістовне</option><option value="alert">оповіщення про загрозу</option><option value="technical">без змісту</option></select></label>
+        <label for="ePromo">Реклама
+          <select id="ePromo"><option value="no">немає</option><option value="ad">реклама</option><option value="self_promo">самопромо</option></select></label>
+        <label for="eHas">Джерело
+          <select id="eHas"><option value="yes">є</option><option value="no">немає</option></select></label>
+      </div>
+      <label for="eSources">Прямі джерела — по одному в рядку: назва; тип (наприклад «Reuters; закордонні медіа»)
+        <textarea id="eSources"></textarea></label>
+      <label for="eNote">Коментар (за бажанням)
+        <textarea id="eNote" style="min-height:48px"></textarea></label>
+      <div class="qrow"><button class="primary" id="saveEdit">Зберегти виправлення</button><button id="cancelEdit">Скасувати</button></div>
+    </div>
+  </section>
+
+  <details class="rules">
+    <summary>Правила коротко</summary>
+    <ul>
+      <li><b>Джерело</b> — те, на що канал явно вказує як на походження інформації: «— УП», «Зеленський заявив», «за даними Reuters», «у Генштабі повідомили», «Генштаб: …», «#нампишуть», посилання на медіа, офіційний сайт чи конкретний Telegram-канал.</li>
+      <li><b>Не джерело</b>: учасник події («СБУ затримала агента»), посилання лише на YouTube/Instagram/петицію без названого джерела, самопосилання каналу.</li>
+      <li>Платформа — не джерело, якщо названо автора: «Єрмак написав у Facebook» → Єрмак.</li>
+      <li>Виробник контенту — джерело: «відео зробили хлопці з каналу БАЗА».</li>
+      <li>Приховане посилання-запрошення в інший канал усередині новини → <b>реклама</b> (рішення ⚑8).</li>
+      <li>«CBS із посиланням на чиновників»: CBS — пряме джерело, чиновники — вкладене.</li>
+      <li>Дрібні розбіжності в написанні назви («Зеленський» / «президент Зеленський») не роблять варіант неправильним.</li>
+      <li>Клавіші: <span class="kbd">1</span> <span class="kbd">2</span> <span class="kbd">3</span> — перше питання; <span class="kbd">A</span> <span class="kbd">B</span> <span class="kbd">C</span> — варіант; <span class="kbd">E</span> — виправити; <span class="kbd">←</span> <span class="kbd">→</span> — навігація.</li>
+    </ul>
+  </details>
+</div>
+
+<script>
+const T = {ua_media:"укр. медіа",foreign_media:"закордонні медіа",russian_media:"рос. медіа",ua_official:"укр. влада",
+  foreign_official:"іноземна влада",russian_official:"рос. влада",politician:"політик",expert:"експерт",
+  company_organization:"компанія / організація",telegram:"Telegram-канал",social:"соцмережі",unnamed_media:"медіа без назви",
+  eyewitness:"очевидці",anonymous:"анонімне",person_other:"особа (тип неясний)",other:"інше"};
+const TYPE_BY_LABEL = Object.fromEntries(Object.entries(T).map(([k,v])=>[v,k]));
+const CT = {informational:"змістовне",alert:"оповіщення про загрозу",technical:"без змісту"};
+const PR = {no:"немає",ad:"реклама",self_promo:"самопромо"};
+const ME = {textual:"у тексті",hyperlink:"лише посиланням",both:"текст + посилання",none:"немає"};
+const LV = {embedded:"вкладене",intermediary:"посередник"};
+const PT = {ua_media_site:"укр. медіа",foreign_media_site:"закорд. медіа",russian_media_site:"рос. медіа",official_site:"офіц. сайт",
+  foreign_official_site:"іноз. офіц. сайт",social_platform:"соцмережа",telegram_channel:"Telegram",other_site:"інший сайт"};
+const FIELD_LABEL = {content_type:"зміст",promotional:"реклама",has_explicit_source:"джерело",attribution_method:"спосіб",
+  direct_sources:"прямі джерела",other_sources:"вкладені / посередники",destinations:"посилання"};
+
+let Q = [], idx = 0, reviews = {}, db = null, editing = false;
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function renderText(t){
+  let s = esc(t).replace(/\*\*|__|~~/g, "");
+  s = s.replace(/\[(https?:\/\/[^\]\s]+)\]/g, (m,u)=>`<span class="lnk">${u.replace(/^https?:\/\//,"").slice(0,60)}</span>`);
+  return s;
+}
+function srcList(list){
+  if(!list || !list.length) return '<span class="none">немає</span>';
+  return '<ul class="src">' + list.map(s => `<li>${esc(s.name)} <span class="type">${esc(T[s.type]||s.type)}${s.level && LV[s.level] ? " · "+LV[s.level] : ""}${s.method==="link"?" · з посилання":""}</span></li>`).join("") + "</ul>";
+}
+function fieldValue(v, f){
+  switch(f){
+    case "content_type": return esc(CT[v.content_type]||v.content_type);
+    case "promotional": return esc(PR[v.promotional]||v.promotional);
+    case "has_explicit_source": return v.has_explicit_source ? "є" : "немає";
+    case "attribution_method": return esc(ME[v.attribution_method]||v.attribution_method);
+    case "direct_sources": return srcList(v.direct_sources);
+    case "other_sources": return srcList(v.other_sources);
+    case "destinations": return v.destinations && v.destinations.length ? '<ul class="src">'+v.destinations.map(d=>`<li>${esc(d.domain)} <span class="type">${esc(PT[d.platform_type]||d.platform_type)}</span></li>`).join("")+"</ul>" : '<span class="none">немає</span>';
+  }
+  return "";
+}
+const ORDER = ["has_explicit_source","direct_sources","other_sources","attribution_method","content_type","promotional","destinations"];
+
+function counts(){
+  const done = Q.filter(x => reviews[x.item_id] && reviews[x.item_id].choice).length;
+  return done;
+}
+function updateBar(){
+  const done = counts();
+  $("nums").textContent = `Перевірено ${done} з ${Q.length} · зараз № ${idx+1} · спершу ${NA} випадкових повідомлень`;
+  $("meterFill").style.width = (Q.length ? 100*done/Q.length : 0) + "%";
+  $("meterMark").style.left = (Q.length ? 100*NA/Q.length : 0) + "%";
+}
+let NA = 773;
+
+function render(){
+  const it = Q[idx]; if(!it) return;
+  editing = false; $("edit").hidden = true;
+  const r = reviews[it.item_id] || {};
+  $("meta").innerHTML = `<span>№ ${it.n}</span><span>${esc(it.channel)}</span><span>${esc(it.date)}</span><span>${esc(it.item_id)}</span>` +
+    (r.choice ? `<span class="done">✓ перевірено</span>` : "");
+  $("text").innerHTML = renderText(it.text);
+  document.querySelectorAll("[data-q1]").forEach(b => b.classList.toggle("sel", r.q1 === b.dataset.q1));
+  const show = !!r.q1;
+  $("step2").hidden = !show;
+  if(show) renderVariants(it, r);
+  $("jump").value = it.n;
+  updateBar();
+}
+function renderVariants(it, r){
+  const fields = ORDER.filter(f => it.fields.includes(f) || f === "has_explicit_source");
+  $("fieldsHint").textContent = it.variants.length > 1
+    ? "Показано лише поля, де варіанти розходяться; жовтим — те, що відрізняється."
+    : "Перевірте, чи кодування правильне.";
+  $("variants").innerHTML = it.variants.map(v => {
+    const rows = fields.map(f => {
+      const vals = new Set(it.variants.map(x => JSON.stringify(x[f])));
+      const diff = it.variants.length > 1 && vals.size > 1;
+      return `<div class="${diff?"diff":""}" style="display:contents"><dt>${FIELD_LABEL[f]}</dt><dd>${fieldValue(v,f)}</dd></div>`;
+    }).join("");
+    return `<article class="var ${r.choice===v.id?"chosen":""}"><h3><span class="letter">${v.id}</span>Варіант ${v.id}</h3><dl>${rows}</dl>
+      <button class="${r.choice===v.id?"primary":""}" data-choose="${v.id}">${it.variants.length>1?"Цей правильний":"Правильно"} <span class="kbd">${v.id}</span></button></article>`;
+  }).join("");
+}
+async function save(item_id, patch){
+  const prev = reviews[item_id] || {};
+  const it = Q.find(x => x.item_id === item_id);
+  const rec = Object.assign({}, prev, patch, {item_id, shown:it.variants.map(v=>v.id), ts:new Date().toISOString(), v:1});
+  reviews[item_id] = rec;
+  updateBar();
+  if(!db){ $("status").textContent = "не збережено (немає сховища)"; $("status").className = "status err"; return; }
+  $("status").textContent = "Збереження…"; $("status").className = "status";
+  try{
+    await db.doc("reviews/" + item_id).set(rec);
+    $("status").textContent = "Збережено"; $("status").className = "status saved";
+  }catch(e){
+    if(e && e.code === "unavailable"){ try{ await new Promise(r=>setTimeout(r,700+Math.random()*600)); await db.doc("reviews/"+item_id).set(rec);
+      $("status").textContent = "Збережено"; $("status").className = "status saved"; return; }catch(_){}}
+    $("status").textContent = "Не вдалося зберегти: " + (e && e.message || "помилка"); $("status").className = "status err";
+  }
+}
+function go(i){ idx = Math.max(0, Math.min(Q.length-1, i)); render(); window.scrollTo({top:0}); }
+function nextTodo(from){
+  for(let k=1;k<=Q.length;k++){ const j=(from+k)%Q.length; if(!(reviews[Q[j].item_id]||{}).choice) return j; }
+  return from;
+}
+async function answerQ1(val){
+  const it = Q[idx]; await save(it.item_id, {q1:val}); render();
+}
+async function choose(id){
+  const it = Q[idx]; await save(it.item_id, {choice:id, edited:null}); go(nextTodo(idx));
+}
+function openEdit(){
+  const it = Q[idx]; const r = reviews[it.item_id] || {}; const base = it.variants[0];
+  const src = (r.edited && r.edited.direct_sources) || base.direct_sources || [];
+  $("eContent").value = (r.edited && r.edited.content_type) || base.content_type;
+  $("ePromo").value = (r.edited && r.edited.promotional) || base.promotional;
+  $("eHas").value = r.q1 === "no" ? "no" : "yes";
+  $("eSources").value = src.map(s => `${s.name}; ${T[s.type]||s.type}`).join("\n");
+  $("eNote").value = r.note || "";
+  $("edit").hidden = false; editing = true; $("eSources").focus();
+}
+async function saveEdit(){
+  const it = Q[idx];
+  const has = $("eHas").value === "yes";
+  const srcs = has ? $("eSources").value.split("\n").map(l=>l.trim()).filter(Boolean).map(l=>{
+    const [name, type] = l.split(";").map(x=>(x||"").trim());
+    return {name, type: TYPE_BY_LABEL[type] || type || "other", specificity:"named", level:"direct", method:"text"};
+  }) : [];
+  const edited = {content_type:$("eContent").value, promotional:$("ePromo").value, has_explicit_source:has,
+    attribution_method: has ? "textual" : "none", direct_sources:srcs};
+  await save(it.item_id, {choice:"edit", edited, note:$("eNote").value, q1: has ? "yes" : "no"});
+  go(nextTodo(idx));
+}
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("button"); if(!b) return;
+  if(b.dataset.q1) answerQ1(b.dataset.q1);
+  else if(b.dataset.choose) choose(b.dataset.choose);
+  else if(b.id === "prev") go(idx-1);
+  else if(b.id === "next") go(idx+1);
+  else if(b.id === "todo") go(nextTodo(idx-1 < 0 ? Q.length-1 : idx-1));
+  else if(b.id === "editBtn") openEdit();
+  else if(b.id === "cancelEdit"){ $("edit").hidden = true; editing = false; }
+  else if(b.id === "saveEdit") saveEdit();
+  else if(b.id === "unsureBtn"){ save(Q[idx].item_id, {choice:"unsure"}).then(()=>go(nextTodo(idx))); }
+});
+$("jump").addEventListener("change", e => { const n = parseInt(e.target.value,10); if(n) go(n-1); });
+document.addEventListener("keydown", e => {
+  if(editing || /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+  const k = e.key.toLowerCase(); const it = Q[idx]; if(!it) return;
+  if(k==="1") answerQ1("yes"); else if(k==="2") answerQ1("no"); else if(k==="3") answerQ1("unsure");
+  else if(["a","b","c"].includes(k) && !$("step2").hidden && it.variants.some(v=>v.id.toLowerCase()===k)) choose(k.toUpperCase());
+  else if(k==="e" && !$("step2").hidden) openEdit();
+  else if(k==="u" && !$("step2").hidden) save(it.item_id,{choice:"unsure"}).then(()=>go(nextTodo(idx)));
+  else if(e.key==="ArrowRight") go(idx+1); else if(e.key==="ArrowLeft") go(idx-1);
+});
+
+(async function start(){
+  try{
+    Q = await fetch("queue.json").then(r => r.json());
+    NA = Q.filter(x => x.n <= 773).length;
+  }catch(e){ $("text").textContent = "Не вдалося завантажити чергу повідомлень. Оновіть сторінку."; return; }
+  idx = 0; render();
+  db = window.claude ? await window.claude.use("db") : null;
+  if(!db){ $("noDb").hidden = false; return; }
+  try{
+    for(const [op, val] of [["<","V0800"],[">=","V0800"]]){
+      const snap = await db.collection("reviews").where("item_id", op, val).get();
+      snap.docs.forEach(d => { const x = d.data(); if(x && x.item_id) reviews[x.item_id] = x; });
+    }
+  }catch(e){ $("status").textContent = "Не вдалося прочитати збережені рішення"; $("status").className = "status err"; }
+  go(nextTodo(Q.length-1));
+})();
+</script>
